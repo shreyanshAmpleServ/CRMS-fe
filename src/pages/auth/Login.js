@@ -50,19 +50,20 @@ const Login = () => {
         <title>Login - DCC CRMS</title>
         <meta name="description" content="Login to access your dashboard." />
       </Helmet>
-      <div className="d-flex flex-wrap vw-100 vh-100 overflow-hidden account-bg-0 bg-white">
+      <div className="d-flex align-items-center   vw-100 vh-100 overflow-hidden account-bg-0 bg-white">
         <img
-          className="d-none d-lg-flex  align-items-center justify-content-center flex-wrap  overflow-auto vh-75 m-auto p-4 w-50 bg-backdrop"
+          className="d-none d-xl-flex  align-items-center justify-content-center flex-wrap  overflow-auto vh-75 m-auto p-4 w-50 bg-backdrop"
           src={logo}
           alt="image"
         />
-        <div className="d-flex responsive-padding  align-items-center justify-content-center flex-wrap vh-100 overflow-auto w-md-50   bg-opacity-25" 
+        <div className="d-flex responsive-padding mx-auto overflow-hidden  align-items-center justify-content-center flex-wrap vh-100 overflow-auto   w-md-50   bg-opacity-25" 
         // style={{
-        //     padding: "5rem" || window.innerWidth >= 992 ? "5rem" : "2rem",
+        //     width:  window.innerWidth >= 992 ? "50%" : "100%",
         // }}
         >
+          
           <div
-            className="shadow-lg rounded p-3 p-lg-5 "
+            className="shadow-lg rounded p-3 p-lg-4 " 
             style={{
               border: "2px light black",
               transform: "scale(1.1)",
@@ -157,7 +158,7 @@ const Login = () => {
                 </div>
                 <div className="text-center">
                   <p className="fw-medium text-gray">
-                    Copyright © 2024 - CRMS
+                    Copyright © 2025 - DCC CRMS
                   </p>
                 </div>
                 {/* <div className="mb-3">
