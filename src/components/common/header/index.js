@@ -14,9 +14,11 @@ import ChangePassword from "./ChangePassword";
 import { ModuleOptions } from "../selectoption/selectoption";
 import Select from "react-select"
 import { Controller, useForm } from "react-hook-form";
+import { base_path } from '../../../config/environment';
+import ImageWithDatabase from "../ImageFromDatabase";
+import logo_path from "../../../assets/logo-2.png";
 
 const Header = () => {
-
   const route = all_routes;
   const location = useLocation();
   const navigate = useNavigate();
@@ -86,10 +88,10 @@ const Header = () => {
           onMouseLeave={toggleExpandMenu2}
         >
           <Link to={route.dasshboard} className="logo logo-normal">
-            <Logo />
+          <Logo base_path={base_path}/>
           </Link>
           <Link to={route.dasshboard} className="logo-small">
-            <ImageWithBasePath src="assets/img/logo-small.svg" alt="Logo" />
+            <ImageWithDatabase src={logo_path}   alt="Logo" className="bg-light" />
           </Link>
           <Link id="toggle_btn" to="#" onClick={toggleMiniSidebar}>
             <i className="ti ti-arrow-bar-to-left" />

@@ -1,7 +1,6 @@
 import React from "react";
 
-import { base_path } from '../../../config/environment';
-const Logo = () => {
+const Logo = ({base_path}) => {
     return (
         <>
             <img src={`${base_path}/assets/img/logo/logo-2.png`} alt="Logo" style={{ width: "65px" }} />
