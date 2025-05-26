@@ -71,6 +71,13 @@ const Login = () => {
               boxShadow: "10px black",
             }}
           >
+                            {errMsg && (
+                  <FlashMessage
+                    type="error"
+                    message={errMsg}
+                    onClose={() => setErrMsg(null)}
+                  />
+                )}
             <form className="flex-fill" onSubmit={handleLogin}>
               <div className="mx-auto mw-450">
                 <div className="text-center mb-4">
@@ -81,13 +88,7 @@ const Login = () => {
                     alt="Logo"
                   />
                 </div>
-                {errMsg && (
-                  <FlashMessage
-                    type="error"
-                    message={errMsg}
-                    onClose={() => setErrMsg(null)}
-                  />
-                )}
+
                 <div className="mb-4">
                   <h4>Sign In</h4>
                   <p>Access the CRMS panel using your email and passcode.</p>
@@ -154,6 +155,18 @@ const Login = () => {
                     disabled={loading}
                   >
                     {loading ? "Signing In..." : "Sign In"}
+                    {loading && (
+                  <div
+                    style={{
+                      height: "15px",
+                      width: "15px",
+                    }}
+                    className="spinner-border ml-2 text-light"
+                    role="status"
+                  >
+                    <span className="visually-hidden">Loading...</span>
+                  </div>
+                )}
                   </button>
                 </div>
                 <div className="text-center">

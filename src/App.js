@@ -27,7 +27,7 @@ const App = () => {
     ? JSON?.parse(localStorage.getItem("permissions"))
     : [];
 
-  const { isAuthenticated, loading } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
 
   useEffect(() => {
     dispatch(loadUser());
@@ -43,7 +43,7 @@ const App = () => {
   return (
     <HelmetProvider>
       <Router>
-        {loading && <Loader />}
+        {/* {loading && <Loader />} */}
         <Routes>
           {/* Public Layout and Routes */}
           {!isAuthenticated && (
