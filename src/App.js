@@ -43,7 +43,7 @@ const App = () => {
   return (
     <HelmetProvider>
       <Router>
-        {loading && <Loader />}
+        {/* {loading && <Loader />} */}
         <Routes>
           {/* Public Layout and Routes */}
           {!isAuthenticated && (

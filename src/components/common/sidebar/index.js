@@ -77,8 +77,13 @@ const Sidebar = () => {
   };
 const [openMain, setOpenMain] = useState("CRM");
 
-const toggleMainSection = (label) => {
+const toggleMainSection = (label , subMenu) => {
   setOpenMain(prev => (prev === label ? "" : label));
+  toggleSidebar(subMenu?.[0]?.label )
+    const targetLink = subMenu?.[0]?.submenu ? "#" : subMenu?.[0]?.link;
+  if (targetLink && targetLink !== "#") {
+     window.history.pushState({}, "", targetLink);
+  }
 };
   return (
     <>
@@ -114,7 +119,7 @@ const toggleMainSection = (label) => {
                 {SidebarData?.map((mainLabel, index) => (
                   <li className="clinicdropdown" key={index}>
                     <div className="d-flex justify-content-between fw-bolder border-bottom"   
-                     onClick={() => toggleMainSection(mainLabel.label)}>
+                     onClick={() => {toggleMainSection(mainLabel.label , mainLabel?.submenuItems)}}>
                     <h6 className="submenu-hdr fw-bold">{mainLabel?.label}</h6>
                    {openMain === mainLabel.label ? <IoIosArrowDown /> :
                     <IoIosArrowUp />}
