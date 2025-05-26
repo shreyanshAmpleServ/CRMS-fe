@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiClient from '../../utils/axiosConfig';
+import toast from 'react-hot-toast';
 
 // Login API Call
 export const registerUser = createAsyncThunk(
@@ -20,13 +21,28 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async (credentials, thunkAPI) => {
     try {
-      const response = await apiClient.post('/v1/login', credentials);
+      // const response = await apiClient.post('/v1/login', credentials);
+         // const response = await apiClient.post("/v1/deals", dealData);
+      const response = await toast.promise(
+        apiClient.post('/v1/login', credentials),
+        {
+          loading: "Sighing in...",
+          // success: (res) => res.data.message || "Deal added successfully!",
+          error: (err) => {
+      const apiMessage =
+        err?.response?.data?.message ||
+        err?.message ||
+        "Failed to sign in";
+      return apiMessage;
+    },
+        }
+      );
       console.log("Response : ", response)
       const userData = response.data;
      
       localStorage.setItem("isAuthenticated", "true"); 
       localStorage.setItem("permissions",userData?.data?.permissions?.permissions ? 
-        Array.isArray(userData?.data?.permissions?.permissions) ? JSON.stringify(userData?.data?.permissions?.permissions) : userData?.data?.permissions?.permissions  : 
+      Array.isArray(userData?.data?.permissions?.permissions) ? JSON.stringify(userData?.data?.permissions?.permissions) : userData?.data?.permissions?.permissions  : 
       Array.isArray(userData?.data?.permissions) ? JSON.stringify(userData?.data?.permissions) : userData?.data?.permissions?.permissions )
 
       localStorage.setItem("role_id", userData?.data?.role_id)

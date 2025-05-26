@@ -88,7 +88,6 @@ const Login = () => {
                     alt="Logo"
                   />
                 </div>
-
                 <div className="mb-4">
                   <h4>Sign In</h4>
                   <p>Access the CRMS panel using your email and passcode.</p>
