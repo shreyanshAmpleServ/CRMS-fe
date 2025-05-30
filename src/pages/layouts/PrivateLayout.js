@@ -21,7 +21,8 @@ const PrivateLayout = () => {
       ${expandMenu ? "expand-menu" : ""}`}>
      
        <div
-        className={`main-wrapper 
+       style={{position:"relative"}}
+        className={`main-wrapper  
         ${headerCollapse ? "header-collapse" : ""} 
         ${mobileSidebar ? "slide-nav" : ""}`}
       >

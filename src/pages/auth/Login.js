@@ -71,13 +71,13 @@ const Login = () => {
               boxShadow: "10px black",
             }}
           >
-                            {errMsg && (
+                            {/* {errMsg && (
                   <FlashMessage
                     type="error"
                     message={errMsg}
                     onClose={() => setErrMsg(null)}
                   />
-                )}
+                )} */}
             <form className="flex-fill" onSubmit={handleLogin}>
               <div className="mx-auto mw-450">
                 <div className="text-center mb-4">

@@ -124,6 +124,12 @@ export const privateRoutes = [
     title: "Dashboard",
   },
   {
+    path: route.leadsDashboard,
+    element: <LeadsDashboard />,
+    route: Route,
+    title: 'Leads Dashboard'
+  },
+  {
     path: route.leads,
     element: <LeadsList />,
     route: Route,

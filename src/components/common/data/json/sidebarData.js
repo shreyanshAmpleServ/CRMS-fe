@@ -16,6 +16,13 @@ export const SidebarData = [
         submenu: false,
       },
       {
+        label: "Lead Dashboard",
+        link: route.leadsDashboard,
+        icon: "ti ti-layout-dashboard",
+        showSubRoute: false,
+        submenu: false,
+      },
+      {
         label: "Leads",
         link: route.leads,
         subLink1: route.leadsDetail,

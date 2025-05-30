@@ -1,693 +1,780 @@
-import React, { useState } from "react";
-import ImageWithBasePath from "../../../components/common/imageWithBasePath";
-import DateRangePicker from "react-bootstrap-daterangepicker";
-// import Chart from "react-apexcharts";
-import { Link } from "react-router-dom";
-import { all_routes } from "../../../routes/all_routes";
-import CollapseHeader from "../../../components/common/collapse-header";
+import ApexCharts from "apexcharts";
+import "bootstrap-daterangepicker/daterangepicker.css";
+import moment from "moment";
+import React, { useEffect, useRef, useState } from "react";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useLocation } from "react-router-dom";
+import DateRangePickerComponent from "../../../components/datatable/DateRangePickerComponent";
+import {  fetchLeadDashboard } from "../../../redux/dashboard";
+import { fetchPipelines } from "../../../redux/pipelines";
+import { LoadingGraph } from "./loading";
+import NoDataFound from "../../../components/common/NotFound/NotFount";
+import { Helmet } from "react-helmet-async";
+import Chart from "react-apexcharts";
+import { fetchLostReasons } from "../../../redux/lostReasons";
 
 
-const route = all_routes;
 const LeadsDashboard = () => {
-    const [chartOptions] = useState({
+  const [dashboardData,setDashboardData] = useState([])
+  const [lostDealData,setLostDealData] = useState([])
+  const [winDealData,setWinDealData] = useState([])
+  const [monthlyDealData,setMonthlyDealData] = useState([])
+  const [whoChange,setWhoChange] =useState()
+  const [isFetching, setIsFetching] = useState(false); // Track API call
+  const [dealStageFilter, setDealStageFilter] = useState();
+  const [lostDealFilter, setLostDealFilter] = useState();
+  const [wonDealFilter, setWonDealFilter] = useState();
+  const [monthlyDealFilter, setMonthlyDealFilter] = useState();
+  const [selectedDateRange, setSelectedDateRange] = useState({
+    startDate: moment().subtract(180, "days"), // Default start date (Last 7 days)
+    endDate: moment(),
+  });
+   const { lostReasons } = useSelector((state) => state.lostReasons);
+    const lostReasonsList = lostReasons.map((emnt) => ({
+      value: emnt.id,
+      label: emnt.name,
+    }));
+  useEffect(() => {
+    localStorage.setItem("menuOpened", "Dashboard");
+  }, []);
+  useEffect(()=>{
+    setWhoChange("")
+  },[selectedDateRange])
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchPipelines());
+    dispatch(fetchLostReasons());
+  }, [dispatch]);
+  React.useEffect(() => {
+    setIsFetching(true); 
+    dispatch(
+      fetchLeadDashboard({
+        ...selectedDateRange,
+        dealsPipelineFilter: dealStageFilter?.id || null,
+        lostDealFilter: lostDealFilter?.id || null,
+        wonDealFilter: wonDealFilter?.id || null,
+        monthlyLeadFilter: monthlyDealFilter?.id || null,
+      })).finally(() => {
+        setIsFetching(false); // Finish API call
+      });
+  }, [
+    dispatch,
+    selectedDateRange,
+    dealStageFilter,
+    lostDealFilter,
+    wonDealFilter,
+    monthlyDealFilter,
+  ]);
+  const { pipelines } = useSelector((state) => state.pipelines);
+
+ // Deals By Stage
+  const chartRef = useRef(null);
+  const { leadDashboard, loading, error, success } = useSelector((state) => state.dashboard);
+  useEffect(()=>{
+    (whoChange === "LeadStage" || whoChange === "" || !dashboardData?.length) && setDashboardData(leadDashboard.leads)
+  },[leadDashboard,dealStageFilter])
+  useEffect(() => {
+    const chart1 = dashboardData?.map((item) => ({
+      x: item?.dealName,
+      y: item?.dealValue,
+    }));
+    // if (!dashboardData.deals || isFetching) return;
+    if (chartRef.current) {
+      const options = {
         series: [
-            {
-                data: [400, 220, 448],
-                color: "#FC0027",
-            },
+          {
+            name: "Lead Source",
+            colors: ["#FFC38F"],
+            data: chart1 ? chart1 : [{ x: 0, y: 0 }],
+          },
         ],
-        chart: {
-            type: "bar",
-            height: 150,
+        chart: {    
+          type: "donut",
+          height: 300,
         },
         plotOptions: {
-            bar: {
-                horizontal: true,
-            },
+          bar: {
+            borderRadiusApplication: "around",
+            columnWidth: "50%",
+          },
         },
-        dataLabels: {
-            enabled: false,
-        },
+        colors: ["#00918E"],
         xaxis: {
-            categories: ["Conversation", "Follow Up", "Inpipeline"],
-            min: 0,
-            max: 500,
-            tickAmount: 5,
-        },
-    });
-    const [chartOptions2] = useState({
-        series: [
-            {
-                data: [400, 220, 448],
-                color: "#77D882",
+          type: "category",
+          title: {
+            text: "Stages", // Label for the x-axis
+            style: {
+              fontSize: "12px",
+              fontWeight: 700,
+              color: "#333",
             },
-        ],
-        chart: {
-            type: "bar",
-            height: 150,
-        },
-        plotOptions: {
-            bar: {
-                horizontal: true,
+          },
+          labels: {
+            style: {
+              fontSize: "12px",
+              fontWeight: 500,
             },
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        xaxis: {
-            categories: ["Conversation", "Follow Up", "Inpipeline"],
-            min: 0,
-            max: 500,
-            tickAmount: 5,
-        },
-    });
-    const [chartOptions3] = useState({
-        series: [44, 55, 13, 43],
-        options: {
-            chart: {
-                width: 400,
-                height: 300,
-                type: "pie",
-            },
-            legend: {
-                position: "bottom",
-            },
-            labels: ["Inpipeline", "Follow Up", "Schedule Service", "Conversation"],
-            responsive: [
-                {
-                    breakpoint: 480,
-                    options: {
-                        chart: {
-                            width: 275,
-                        },
-                        legend: {
-                            position: "bottom",
-                        },
-                    },
-                },
-            ],
-        },
-    });
-
-
-    const chartElement = document.querySelector("#leadpiechart");
-    if (chartElement) {
-        const options = {
-            series: chartOptions3.series,
-            chart: {
-                width: 400,
-                type: "pie",
-            },
-            legend: {
-                position: "bottom",
-            },
-            labels: chartOptions3.options.labels,
-            responsive: chartOptions3.options.responsive,
-        };
-
-        // const chart = new ApexCharts(chartElement, options);
-        // chart.render();
-    }
-
-
-
-
-
-
-    // const [chartOptions3] = useState<any>( {
-    //   series: [44, 55, 13, 43],
-    //   options: {
-    //     chart: {
-    //       width: 400,
-    //       height: 300,
-    //       type: "pie",
-    //     },
-    //     legend: {
-    //       position: "bottom",
-    //     },
-    //     labels: ["Inpipeline", "Follow Up", "Schedule Service", "Conversation"],
-    //     responsive: [
-    //       {
-    //         breakpoint: 480,
-    //         options: {
-    //           chart: {
-    //             width: 275,
-    //           },
-    //           legend: {
-    //             position: "bottom",
-    //           },
-    //         },
-    //       },
-    //     ],
-    //   },
-    // });
-    const [chartOptions4] = useState({
-        series: [
-            {
-                name: "Reports",
-                data: [40, 30, 20, 30, 22, 20, 30, 20, 22, 30, 15, 20],
-            },
-        ],
-        colors: ["#4A00E5"],
-        chart: {
-            height: 273,
-            type: "area",
-            zoom: {
-                enabled: false,
-            },
-        },
-        dataLabels: {
-            enabled: false,
-        },
-        title: {
-            text: "",
-            align: "left",
-        },
-        xaxis: {
-            categories: [
-                "Jan",
-                "Feb",
-                "Mar",
-                "Apr",
-                "May",
-                "Jun",
-                "Jul",
-                "Aug",
-                "Sep",
-                "Oct",
-                "Nov",
-                "Dec",
-            ],
+          },
         },
         yaxis: {
-            min: 10,
-            max: 60,
-            tickAmount: 5,
+          categories: dashboardData?.leads?.length
+            ? dashboardData?.leads?.map((item) => item.stages.name)
+            : ["0"],
+          title: {
+            text: "Deal Value", // Label for the x-axis
+            style: {
+              fontSize: "12px",
+              fontWeight: 700,
+              color: "#333",
+            },
+          },
+          labels: {
+            style: {
+              fontSize: "12px",
+              fontWeight: 500,
+            },
+          },
+          tickAmount: 6,
         },
-        legend: {
-            position: "top",
-            horizontalAlign: "left",
-        },
-    });
+      };
 
+      const chart = new ApexCharts(chartRef.current, options);
+      chart.render();
 
-    const initialSettings = {
-        endDate: new Date("2020-08-11T12:30:00.000Z"),
-        ranges: {
-            "Last 30 Days": [
-                new Date("2020-07-12T04:57:17.076Z"),
-                new Date("2020-08-10T04:57:17.076Z"),
-            ],
-            "Last 7 Days": [
-                new Date("2020-08-04T04:57:17.076Z"),
-                new Date("2020-08-10T04:57:17.076Z"),
-            ],
-            "Last Month": [
-                new Date("2020-06-30T18:30:00.000Z"),
-                new Date("2020-07-31T18:29:59.999Z"),
-            ],
-            "This Month": [
-                new Date("2020-07-31T18:30:00.000Z"),
-                new Date("2020-08-31T18:29:59.999Z"),
-            ],
-            Today: [
-                new Date("2020-08-10T04:57:17.076Z"),
-                new Date("2020-08-10T04:57:17.076Z"),
-            ],
-            Yesterday: [
-                new Date("2020-08-09T04:57:17.076Z"),
-                new Date("2020-08-09T04:57:17.076Z"),
-            ],
+      // Cleanup on unmount
+      return () => {
+        chart.destroy();
+      };
+    }
+  }, [dashboardData]);
+
+//   Lead By source 
+let labels = leadDashboard?.leadSources?.map((item) => item?.source) || [];
+const donutOptions = {
+  chart: {
+    type: "donut",
+  },
+  labels: labels,
+  colors: ["#007bff", "#6f42c1", "#dc3545", "#fd7e14"],
+  legend: {
+    position: "bottom",
+  },
+
+  dataLabels: {
+    enabled: false,
+    formatter: (val, opts) =>
+      `${opts.w.config.labels[opts.seriesIndex]} - ${opts.w.config.series[opts.seriesIndex]}`,
+  },
+};
+
+const donutSeries =
+  leadDashboard?.leadSources?.map((item) => item?.count) || [];
+
+  //  Leads By Stage
+  const LeadsBySatge = useRef(null);
+  useEffect(()=>{
+    (whoChange === "LostDeal" || whoChange === "" || !lostDealData?.length) && setLostDealData(leadDashboard.lostLeads)
+  },[leadDashboard,lostDealFilter])
+ 
+
+  useEffect(() => {
+    const lostChart = lostDealData?.map((item) => ({
+      x: item?.dealName || "Unknown",
+      y: item?.dealValue || 0,
+    }));
+    // if (!dashboard.lostDeals || isFetching) return;
+    if (LeadsBySatge.current) {
+      const options = {
+        series: [
+          {
+            name: "Deal Value",
+            colors: ["#FFC38F"],
+            data: lostDealData?.length ? lostChart : [{ x: 0, y: 0 }],
+          },
+        ],
+        chart: {
+          type: "bar",
+          height: 150,
         },
-        startDate: new Date("2020-08-04T04:57:17.076Z"), // Set "Last 7 Days" as default
-        timePicker: false,
+        plotOptions: {
+          bar: {
+            horizontal: true,
+          },
+        },
+        dataLabels: {
+          enabled: false,
+        },
+        colors: ["#FC0027"],
+        xaxis: {
+          categories: lostDealData?.length
+            ? lostDealData?.map((item) => item.leads.name)
+            : ["0"],
+
+          //     // tickAmount: 6,
+        },
+      };
+
+      const chart = new ApexCharts(LeadsBySatge.current, options);
+      chart.render();
+
+      // Cleanup on unmount
+      return () => {
+        chart.destroy();
+      };
+    }
+  }, [lostDealData]);
+  // Won Deals Chat
+  const wonChat = useRef(null);
+  useEffect(()=>{
+    (whoChange === "WinDeal" || whoChange === "" || !winDealData?.length) && setWinDealData(leadDashboard.wonLeadss)
+  },[leadDashboard,wonDealFilter])
+ 
+
+  useEffect(() => {
+    const winChart = winDealData?.map((item) => ({
+      x: item?.dealName || "Unknowen",
+      y: item?.dealValue || 0,
+    }));
+    // if (!dashboard.wonDeals || isFetching) return; 
+    const options = {
+      series: [
+        {
+          name: "Deal Value",
+          colors: ["#FFC38F"],
+          data: winDealData?.length ? winChart : [{ x: 0, y: 0 }],
+        },
+      ],
+      chart: {
+        type: "bar",
+        height: 150,
+      },
+      plotOptions: {
+        bar: {
+          horizontal: true,
+        },
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      colors: ["#5CB85C"],
+      xaxis: {
+        categories: winDealData?.length
+          ? winDealData?.map((item) => item.leads.name)
+          : ["0"],
+        //   // min: 0,
+        //   // max: 500,
+        //   // tickAmount: 5,
+      },
     };
-    return (
-        <div>
-            {/* Page Wrapper */}
-            <div className="page-wrapper">
-                <div className="content">
-                    <div className="row">
-                        <div className="col-md-12">
-                            <div className="page-header">
-                                <div className="row align-items-center ">
-                                    <div className="col-md-4">
-                                        <h3 className="page-title">Leads Dashboard</h3>
-                                    </div>
-                                    <div className="col-md-8 float-end ms-auto">
-                                        <div className="d-flex title-head">
-                                            <div className="daterange-picker d-flex align-items-center justify-content-center">
-                                                <div className="form-sort me-2">
-                                                    <i className="ti ti-calendar" />
-                                                    <DateRangePicker
-                                                        initialSettings={initialSettings}
-                                                    >
-                                                        <input
-                                                            className="form-control bookingrange"
-                                                            type="text"
-                                                        />
-                                                    </DateRangePicker>
-                                                </div>
-                                                <div className="head-icons mb-0">
-                                                    <CollapseHeader />
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-7">
-                            <div className="card">
-                                <div className="card-header border-0 pb-0">
-                                    <div className="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-                                        <h4>
-                                            <i className="ti ti-grip-vertical me-1" />
-                                            Recently Created Leads
-                                        </h4>
-                                        <div className="dropdown">
-                                            <Link
-                                                className="dropdown-toggle"
-                                                data-bs-toggle="dropdown"
-                                                to="#"
-                                            >
-                                                <i className="ti ti-calendar-check me-2" />
-                                                Last 30 days
-                                            </Link>
-                                            <div className="dropdown-menu dropdown-menu-end">
-                                                <Link to="#" className="dropdown-item">
-                                                    Last 15 days
-                                                </Link>
-                                                <Link to="#" className="dropdown-item">
-                                                    Last 30 days
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-body">
-                                    <div className="table-responsive custom-table">
-                                        <table className="table dataTable" id="lead-project">
-                                            <thead className="thead-light">
-                                                <tr>
-                                                    <th>Lead Name</th>
-                                                    <th>Company Name</th>
-                                                    <th>Phone</th>
-                                                    <th>Lead Status</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr className="odd">
-                                                    <td>Collins</td>
-                                                    <td>
-                                                        <h2 className="d-flex align-items-center">
-                                                            <Link
-                                                                to={route.companyDetails}
-                                                                className="avatar avatar-sm border me-2"
-                                                            >
-                                                                <ImageWithBasePath
-                                                                    className="w-auto h-auto"
-                                                                    src="assets/img/icons/company-icon-01.svg"
-                                                                    alt="User Image"
-                                                                />
-                                                            </Link>
-                                                            <Link
-                                                                to={route.companyDetails}
-                                                                className="d-flex flex-column"
-                                                            >
-                                                                NovaWave LLC<span className="text-default">Newyork, USA </span>
-                                                            </Link>
-                                                        </h2>
-                                                    </td>
-                                                    <td>+1 875455453</td>
-                                                    <td>
-                                                        <span className="badge badge-pill  bg-pending">
-                                                            {" "}
-                                                            Not Contacted
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                                <tr className="even">
-                                                    <td>Konopelski</td>
-                                                    <td>
-                                                        <h2 className="d-flex align-items-center">
-                                                            <Link
-                                                                to={route.companyDetails}
-                                                                className="avatar avatar-sm border me-2"
-                                                            >
-                                                                <ImageWithBasePath
-                                                                    className="w-auto h-auto"
-                                                                    src="assets/img/icons/company-icon-02.svg"
-                                                                    alt="User Image"
-                                                                />
-                                                            </Link>
-                                                            <Link
-                                                                to={route.companyDetails}
-                                                                className="d-flex flex-column"
-                                                            >
-                                                                BlueSky Industries
-                                                                <span className="text-default">Winchester, KY </span>
-                                                            </Link>
-                                                        </h2>
-                                                    </td>
-                                                    <td>+1 989757485</td>
-                                                    <td>
-                                                        <span className="badge badge-pill  bg-warning">
-                                                            {" "}
-                                                            Contacted
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                                <tr className="odd">
-                                                    <td>Adams</td>
-                                                    <td>
-                                                        <h2 className="d-flex align-items-center">
-                                                            <Link
-                                                                to={route.companyDetails}
-                                                                className="avatar avatar-sm border me-2"
-                                                            >
-                                                                <ImageWithBasePath
-                                                                    className="w-auto h-auto"
-                                                                    src="assets/img/icons/company-icon-03.svg"
-                                                                    alt="User Image"
-                                                                />
-                                                            </Link>
-                                                            <Link
-                                                                to={route.companyDetails}
-                                                                className="d-flex flex-column"
-                                                            >
-                                                                SilverHawk<span className="text-default">Jametown, NY </span>
-                                                            </Link>
-                                                        </h2>
-                                                    </td>
-                                                    <td>+1 546555455</td>
-                                                    <td>
-                                                        <span className="badge badge-pill  bg-warning">
-                                                            {" "}
-                                                            Contacted
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                                <tr className="even">
-                                                    <td>Schumm</td>
-                                                    <td>
-                                                        <h2 className="d-flex align-items-center">
-                                                            <Link
-                                                                to={route.companyDetails}
-                                                                className="avatar avatar-sm border me-2"
-                                                            >
-                                                                <ImageWithBasePath
-                                                                    className="w-auto h-auto"
-                                                                    src="assets/img/icons/company-icon-04.svg"
-                                                                    alt="User Image"
-                                                                />
-                                                            </Link>
-                                                            <Link
-                                                                to={route.companyDetails}
-                                                                className="d-flex flex-column"
-                                                            >
-                                                                SummitPeak<span className="text-default">Compton, RI </span>
-                                                            </Link>
-                                                        </h2>
-                                                    </td>
-                                                    <td>+1 454478787</td>
-                                                    <td>
-                                                        <span className="badge badge-pill  bg-pending">
-                                                            {" "}
-                                                            Not Contacted
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-5 d-flex">
-                            <div className="card w-100">
-                                <div className="card-header border-0 pb-0">
-                                    <div className="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-                                        <h4>
-                                            <i className="ti ti-grip-vertical me-1" />
-                                            Projects By Stage
-                                        </h4>
-                                        <div className="dropdown">
-                                            <Link
-                                                className="dropdown-toggle"
-                                                data-bs-toggle="dropdown"
-                                                to="#"
-                                            >
-                                                Last 30 Days
-                                            </Link>
-                                            <div className="dropdown-menu dropdown-menu-end">
-                                                <Link to="#" className="dropdown-item">
-                                                    Last 30 Days
-                                                </Link>
-                                                <Link to="#" className="dropdown-item">
-                                                    Last 15 Days
-                                                </Link>
-                                                <Link to="#" className="dropdown-item">
-                                                    Last 7 Days
-                                                </Link>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-body">
-                                    {/* <div id="leadpiechart">
-                                        <Chart
-                                            options={chartOptions3.options}
-                                            series={chartOptions3.series}
-                                            type="pie"
-                                            width={chartOptions3.options.chart.width}
-                                            height={chartOptions3.options.chart.height}
-                                        />
-                                    </div> */}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="row">
-                        <div className="col-md-12 d-flex">
-                            <div className="card w-100">
-                                <div className="card-header border-0 pb-0">
-                                    <div className="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-                                        <h4>
-                                            <i className="ti ti-grip-vertical me-1" />
-                                            Projects By Stage
-                                        </h4>
-                                        <div className="d-flex align-items-center flex-wrap row-gap-2">
-                                            <div className="dropdown me-2">
-                                                <Link
-                                                    className="dropdown-toggle"
-                                                    data-bs-toggle="dropdown"
-                                                    to="#"
-                                                >
-                                                    Sales Pipeline
-                                                </Link>
-                                                <div className="dropdown-menu dropdown-menu-end">
-                                                    <Link to="#" className="dropdown-item">
-                                                        Marketing Pipeline
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Sales Pipeline
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Email
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Chats
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Operational
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                            <div className="dropdown">
-                                                <Link
-                                                    className="dropdown-toggle"
-                                                    data-bs-toggle="dropdown"
-                                                    to="#"
-                                                >
-                                                    Last 30 Days
-                                                </Link>
-                                                <div className="dropdown-menu dropdown-menu-end">
-                                                    <Link to="#" className="dropdown-item">
-                                                        Last 30 Days
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Last 15 Days
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Last 7 Days
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-body">
-                                    {/* <div id="contact-report">
-                                        <Chart
-                                            options={chartOptions4}
-                                            series={chartOptions4.series}
-                                            type="area"
-                                            height={chartOptions4.chart.height}
-                                        />
-                                    </div> */}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="card">
-                                <div className="card-header border-0 pb-0">
-                                    <div className="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-                                        <h4>
-                                            <i className="ti ti-grip-vertical me-1" />
-                                            Leads By Stage
-                                        </h4>
-                                        <div className="d-flex align-items-center flex-wrap row-gap-2">
-                                            <div className="dropdown me-2">
-                                                <Link
-                                                    className="dropdown-toggle"
-                                                    data-bs-toggle="dropdown"
-                                                    to="#"
-                                                >
-                                                    Marketing Pipeline
-                                                </Link>
-                                                <div className="dropdown-menu dropdown-menu-end">
-                                                    <Link to="#" className="dropdown-item">
-                                                        Marketing Pipeline
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Sales Pipeline
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Email
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Chats
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Operational
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                            <div className="dropdown">
-                                                <Link
-                                                    className="dropdown-toggle"
-                                                    data-bs-toggle="dropdown"
-                                                    to="#"
-                                                >
-                                                    Last 3 months
-                                                </Link>
-                                                <div className="dropdown-menu dropdown-menu-end">
-                                                    <Link to="#" className="dropdown-item">
-                                                        Last 3 months
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Last 6 months
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Last 12 months
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-body">
-                                    {/* <div id="last-chart">
-                                        <Chart
-                                            options={chartOptions}
-                                            series={chartOptions.series}
-                                            type={chartOptions.chart.type}
-                                            height={chartOptions.chart.height}
-                                        />
-                                    </div> */}
-                                </div>
-                            </div>
-                        </div>
-                        <div className="col-md-6">
-                            <div className="card">
-                                <div className="card-header border-0 pb-0">
-                                    <div className="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
-                                        <h4>
-                                            <i className="ti ti-grip-vertical me-1" />
-                                            Won Deals Stage
-                                        </h4>
-                                        <div className="d-flex align-items-center flex-wrap row-gap-2">
-                                            <div className="dropdown me-2">
-                                                <Link
-                                                    className="dropdown-toggle"
-                                                    data-bs-toggle="dropdown"
-                                                    to="#"
-                                                >
-                                                    Marketing Pipeline
-                                                </Link>
-                                                <div className="dropdown-menu dropdown-menu-end">
-                                                    <Link to="#" className="dropdown-item">
-                                                        Marketing Pipeline
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Sales Pipeline
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Email
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Chats
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Operational
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                            <div className="dropdown">
-                                                <Link
-                                                    className="dropdown-toggle"
-                                                    data-bs-toggle="dropdown"
-                                                    to="#"
-                                                >
-                                                    Last 3 months
-                                                </Link>
-                                                <div className="dropdown-menu dropdown-menu-end">
-                                                    <Link to="#" className="dropdown-item">
-                                                        Last 3 months
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Last 6 months
-                                                    </Link>
-                                                    <Link to="#" className="dropdown-item">
-                                                        Last 12 months
-                                                    </Link>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="card-body ">
-                                    {/* <div id="won-chart">
-                                        {" "}
-                                        <Chart
-                                            options={chartOptions2}
-                                            series={chartOptions2.series}
-                                            type={chartOptions2.chart.type}
-                                            height={chartOptions2.chart.height}
-                                        />
-                                    </div> */}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-        </div>
+    if (wonChat.current) {
+      const chart = new ApexCharts(wonChat.current, options);
+      chart.render();
+
+      // Cleanup on unmount
+      return () => {
+        chart.destroy();
+      };
+    }
+  }, [winDealData]);
+  // Deals By Year
+  const dealsByYear = useRef(null);
+  // Define all months in order
+  useEffect(()=>{
+    (whoChange === "MonthlyDeal" || whoChange === "" || !monthlyDealData?.length) && setMonthlyDealData(leadDashboard.monthlyLeads)
+  },[leadDashboard,monthlyDealFilter])
+  
+  // Convert `monthlyDeals` object into an array with correct month order
+  
+  useEffect(() => {
+    const defaultData = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const data = months.map(
+      (_, index) => monthlyDealData?.[index + 1] || 0
     );
+    const options = {
+      series: [
+        {
+          name: "Leads",
+          data: data || defaultData,
+        },
+      ],
+      chart: {
+        height: 273,
+        type: "area",
+        zoom: {
+          enabled: false,
+        },
+      },
+      colors: ["#E41F07"],
+      dataLabels: {
+        enabled: false,
+      },
+      stroke: {
+        curve: 'smooth'
+      },
+      title: {
+        text: "",
+        align: "left",
+      },
+      xaxis: {
+        categories: months,
+      },
+      yaxis: {
+        // min: 10,
+        // max: 60,
+        tickAmount: 5,
+        labels: {
+          formatter: (val) => {
+            return val ;
+          },
+        },
+      },
+      legend: {
+        position: "top",
+        horizontalAlign: "left",
+      },
+    };
+
+    if (dealsByYear.current) {
+      const chart = new ApexCharts(dealsByYear.current, options);
+      chart.render();
+
+      // Cleanup on unmount
+      return () => {
+        chart.destroy();
+      };
+    }
+  }, [monthlyDealData]);
+  const location = useLocation();
+  const [showLoader, setShowLoader] = useState(false);
+
+  useEffect(() => {
+    if (location.pathname === "/dashboard/leads-dashboard") {
+      setShowLoader(true);
+      setTimeout(() => {
+        setShowLoader(false);
+      }, 2000);
+    }
+  }, [location.pathname]);
+
+  return (
+    <>
+      <Helmet>
+        <title>DCC CRMS -Lead Dashboard</title>
+        <meta name="Lead Dashboard" content="This is Lead Dashboard page of DCC CRMS." />
+      </Helmet>
+      <div className="page-wrapper">
+        <div className="content">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="page-header">
+                <div className="row align-items-center ">
+                  <div className="col-md-4">
+                    <h3 className="page-title">Lead Dashboard</h3>
+                  </div>
+                  <div className="col-md-8 float-end ms-auto">
+                    <div className="d-flex title-head">
+                      <div className="daterange-picker d-flex align-items-center justify-content-center">
+                        <DateRangePickerComponent
+                          selectedDateRange={selectedDateRange}
+                          setSelectedDateRange={setSelectedDateRange}
+                        />
+                        <div className="head-icons mb-0">
+                          <OverlayTrigger
+                            placement="bottom"
+                            overlay={
+                              <Tooltip id="refresh-tooltip">Refresh</Tooltip>
+                            }
+                          >
+                            <Link
+                              to="#"
+                              onClick={() => {
+                                setDealStageFilter(null);
+                                setLostDealFilter(null);
+                                setWonDealFilter(null);
+                                setMonthlyDealFilter(null);
+                              }}
+                            >
+                              <i className="ti ti-refresh-dot" />
+                            </Link>
+                          </OverlayTrigger>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="row">
+            <div  className="scroll-container col-md-6 position-relative">
+            <LoadingGraph isFetching={isFetching}  whoChange={whoChange} name="" />
+              <div className="card flex-fill">
+                <div className="card-header border-0 pb-0">
+                  <div className="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                    <h4>
+                      <i className="ti ti-grip-vertical me-1" />
+                      Recently Created Leads
+                    </h4>
+                  </div>
+                </div>
+                <div className="card-body">
+                  <div  style={{height:"38.7vh" , marginBottom:"15px", overflowY:"scroll"}} className="scroll-containe table-responsive custom-table">
+                    <table className="table dataTable" id="leads-project">
+                      <thead className="thead-light">
+                        <tr>
+                          <th>Title</th>
+                          <th>Name</th>
+                          <th>Company</th>
+                          <th>Phone</th>
+                          <th>Email</th>
+                          <th>Status</th>
+                        </tr>
+                      </thead>
+                      <tbody >
+                        { leadDashboard?.leads?.map((item) => (
+                          <tr  className="odd">
+                            <td >{item?.title}</td>
+                            <td ><span style={{width:"10px !important" , overflow:"hidden"}}>{item?.first_name  +" "+item?.last_name}</span></td>
+                            <td>{item?.lead_company?.name}</td>
+                            <td>{item?.phone}</td>
+                            <td>{item?.email}</td>
+                            <td> <span
+          className={`text-white badge badge-pill badge-status`}
+          style={{ backgroundColor: item?.crms_m_lost_reasons?.colorCode }}
+        >{item?.crms_m_lost_reasons?.name}</span></td>
+                            <td>
+                              <span
+                                className={`badge badge-pill  ${item?.status == "Open" ? "bg-info" : item?.status == "Lost" ? "bg-danger" : "bg-success"}`}
+                              >
+                                {item?.status}
+                              </span>
+                            </td>
+                          </tr>
+                        )) }
+                      {/* // : <div style={{width:"100%", height:'60%'}} className=" d-flex justify-content-center mx-25 ">  </div>} */}
+                      </tbody>
+                    </table>
+                    {/* <NoDataFound /> */}
+                    {!leadDashboard?.leads?.length &&  <div style={{marginLeft:"25%" , marginTop:"10%"}}  className="d-flex flex-column align-items-center justify-content-center h-50 w-50  py-5 gap-3">
+                    <img src="https://pub-16f3de4d2c4841169d66d16992f9f0d3.r2.dev/assets/Sales/pana.svg" alt="" />
+                    <p className="h5 font-weight-semibold">No Data Found</p>
+            
+      </div>}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div  className="col-md-6 position-relative ">
+            <LoadingGraph isFetching={isFetching}  whoChange={whoChange} name="LeadStage" />
+              <div className="card flex-fill">
+                <div className="card-header border-0 pb-0">
+                  <div className="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                    <h4>
+                      <i className="ti ti-grip-vertical me-1" />
+                      Leads By Source
+                    </h4>
+                    <div
+                      style={{ width: "34%" }}
+                      className="d-flex align-items-center flex-wrap row-gap-2"
+                    >
+                      {/* <div className="dropdown w-100 me-2">
+                        <Link
+                          className="dropdown-toggle text-nowrap text-truncate"
+                          data-bs-toggle="dropdown"
+                          to="#"
+                        >
+                          <div
+                            style={{ width: "95%" }}
+                            className="text-truncate"
+                          >
+                            {" "}
+                            {dealStageFilter?.name || "Select Pipline"}{" "}
+                          </div>
+                        </Link>
+                        <div className="dropdown-menu w-100 dropdown-menu-end">
+                          <Link
+                            to="#"
+                            onClick={() =>{
+                              setDealStageFilter({
+                                id: null,
+                                name: "Select Pipline",
+                              });
+                            setWhoChange("LeadStage")}
+                            }
+                            className="dropdown-item"
+                          >
+                            All Pipline
+                          </Link>
+                          {pipelines?.data?.map((item) => (
+                            <Link
+                              key={item.id}
+                              to="#"
+                              onClick={() =>{
+                                setDealStageFilter({
+                                  id: item.id,
+                                  name: item.name,
+                                })
+                                setWhoChange("LeadStage")
+                              }}
+                              className="dropdown-item"
+                            >
+                              {item.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </div> */}
+                    
+                    </div>
+                  </div>
+                </div>
+                <div style={{height:"43.5vh" , marginBottom:"15px", overflowY:"hidden"}} className=" card-body">
+                  {/* <div id="leads-chart" ref={chartRef} /> */}
+                    {donutSeries.length > 0 && labels.length > 0 && (
+                                    <Chart
+                                      options={donutOptions}
+                                      series={donutSeries}
+                                      type="donut"
+                                      height={230}
+                                    />
+                                  )}
+                                    {/* <NoDataFound /> */}
+                    {!donutSeries.length > 0 && !labels.length > 0 &&  <div style={{marginLeft:"25%" , marginTop:"10%"}}  className="d-flex flex-column align-items-center justify-content-center h-50 w-50  py-5 gap-3">
+                    <img src="https://pub-16f3de4d2c4841169d66d16992f9f0d3.r2.dev/assets/Sales/pana.svg" alt="" />
+                    <p className="h5 font-weight-semibold">No Data Found</p>
+            
+      </div>}
+                </div>
+              </div>
+            </div>
+          </div>
+          {/* <div className="row">
+            <div className="col-md-6 position-relative ">
+            <LoadingGraph isFetching={isFetching}  whoChange={whoChange} name="LostDeal" />
+              <div className="card flex-fill">
+                <div className="card-header border-0 pb-0">
+                  <div className="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                    <h4>
+                      <i className="ti ti-grip-vertical me-1" />
+                      Lost Deads Stage
+                    </h4>
+                    <div
+                      style={{ width: "34%" }}
+                      className="d-flex align-items-center flex-wrap row-gap-2"
+                    >
+                      <div className="dropdown w-100 me-2">
+                        <Link
+                          className="dropdown-toggle text-nowrap text-truncate"
+                          data-bs-toggle="dropdown"
+                          to="#"
+                        >
+                          <div
+                            style={{ width: "95%" }}
+                            className="text-truncate"
+                          >
+                            {" "}
+                            {lostDealFilter?.name || "Select Pipline"}{" "}
+                          </div>
+                        </Link>
+                        <div className="dropdown-menu w-100 dropdown-menu-end">
+                          <Link
+                            to="#"
+                            onClick={() =>{
+                              setLostDealFilter({
+                                id: null,
+                                name: "Select Pipline",
+                              })
+                              setWhoChange("LostDeal")
+                           } }
+                            className="dropdown-item"
+                          >
+                            All Pipline
+                          </Link>
+                          {pipelines?.data?.map((item) => (
+                            <Link
+                              key={item.id}
+                              to="#"
+                              onClick={() =>{
+                                setLostDealFilter({
+                                  id: item.id,
+                                  name: item.name,
+                                });
+                                setWhoChange("LostDeal")}
+                              }
+                              className="dropdown-item"
+                            >
+                              {item.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="card-body">
+                  <div id="last-chart" ref={LeadsBySatge} />
+                </div>
+              </div>
+            </div>
+            <div className="col-md-6 position-relative ">
+            <LoadingGraph isFetching={isFetching}  whoChange={whoChange} name="WinDeal" />
+              <div className="card flex-fill">
+                <div className="card-header border-0 pb-0">
+                  <div className="d-flex align-items-center justify-content-between flex-wrap row-gap-2">
+                    <h4>
+                      <i className="ti ti-grip-vertical me-1" />
+                      Won Leads Stage
+                    </h4>
+                    <div
+                      style={{ width: "34%" }}
+                      className="d-flex align-items-center flex-wrap row-gap-2"
+                    >
+                      <div className="dropdown w-100 me-2">
+                        <Link
+                          className="dropdown-toggle text-nowrap text-truncate"
+                          data-bs-toggle="dropdown"
+                          to="#"
+                        >
+                          <div
+                            style={{ width: "95%" }}
+                            className="text-truncate"
+                          >
+                            {" "}
+                            {wonDealFilter?.name || "Select Pipline"}{" "}
+                          </div>
+                        </Link>
+                        <div className="dropdown-menu w-100 dropdown-menu-end">
+                          <Link
+                            to="#"
+                            onClick={() =>{
+                              setWonDealFilter({
+                                id: null,
+                                name: "Select Pipline",
+                              })
+                              setWhoChange("WinDeal")
+                            }}
+                            className="dropdown-item"
+                          >
+                            All Pipline
+                          </Link>
+                          {pipelines?.data?.map((item) => (
+                            <Link
+                              key={item.id}
+                              to="#"
+                              onClick={() =>{
+                                setWonDealFilter({
+                                  id: item.id,
+                                  name: item.name,
+                                })
+                                setWhoChange("WinDeal")
+                              }}
+                              className="dropdown-item"
+                            >
+                              {item.name}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    
+                    </div>
+                  </div>
+                </div>
+                <div className="card-body">
+                  <div id="won-chart" ref={wonChat} />
+                </div>
+              </div>
+            </div>
+          </div> */}
+          <div className="row position-relative">
+          <LoadingGraph isFetching={isFetching}  whoChange={whoChange} name="MonthlyDeal" />
+           <div className="col-md-12 d-flex">
+              <div className="card
+               w-100">
+                <div className="card-header border-0 pb-0">
+                  <div className="d-flex align-items-center justify-content-between flex-wrap row-gap-3">
+                    <h4>
+                      <i className="ti ti-grip-vertical me-1" />
+                      Leads by Year
+                    </h4>
+                    <div
+                      style={{ width: "20%" }}
+                      className="d-flex align-items-center flex-wrap row-gap-2"
+                    >
+                      <div className="dropdown w-100 me-2">
+                        <Link
+                          className="dropdown-toggle text-nowrap text-truncate"
+                          data-bs-toggle="dropdown"
+                          to="#"
+                        >
+                          <div
+                            style={{ width: "95%" }}
+                            className="text-truncate"
+                          >
+                            {" "}
+                            {monthlyDealFilter?.name || "Select Status"}{" "}
+                          </div>
+                        </Link>
+                        <div className="dropdown-menu w-100 dropdown-menu-end">
+                          <Link
+                            to="#"
+                            onClick={() =>{
+                              setMonthlyDealFilter({
+                                id: null,
+                                name: "Select Pipline",
+                              })
+                              setWhoChange("MonthlyDeal")
+                            }}
+                            className="dropdown-item"
+                          >
+                            All 
+                          </Link>
+                          {lostReasonsList?.map((item) => (
+                            <Link
+                              key={item.id}
+                              to="#"
+                              onClick={() =>{
+                                setMonthlyDealFilter({
+                                  id: item.value,
+                                  name: item.label,
+                                })
+                                setWhoChange("MonthlyDeal")
+                              }}
+                              className="dropdown-item"
+                            >
+                              {item.label}
+                            </Link>
+                          ))}
+                        </div>
+                      </div>
+                    
+                    </div>
+                  </div>
+                </div>
+                <div className="card-body">
+                  <div id="leads-year" ref={dealsByYear} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default LeadsDashboard;
