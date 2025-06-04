@@ -30,25 +30,26 @@ import mappedStatesReducer from "./mappedState";
 import modulesReducer from "./Modules";
 import permissionsReducer from "./permissions";
 import attachmentsReducer from "./attachment";
-import productCategoryReducer from "./productCategory"
-import manufacturerReducer from "./manufacturer"
-import productsReducer from "./products"
-import taxSetupReducer from "./taxSetUp"
-import orderReducer from "./order"
-import quotationReducer from "./quotation"
-import purchaseOrderReducer from "./purchaseOrder"
-import salesInvoiceReducer from "./salesInvoice"
-import purchaseInvoiceReducer from "./purchaseInvoice"
-import priceBookReducer from "./priceBook"
-import casesReducer from "./cases"
-import solutionsReducer from "./solutions"
-import campaignsReducer from "./campaign"
-import dealReportReducer from "./dealReport"
-import leadReportReducer from "./leadReport"
-import contactReportReducer from "./contactReport"
-import companyReportReducer from "./companyReport"
-import projectReportReducer from "./projectReport"
-import TaskReportReducer from "./TaskReport"
+import productCategoryReducer from "./productCategory";
+import manufacturerReducer from "./manufacturer";
+import productsReducer from "./products";
+import taxSetupReducer from "./taxSetUp";
+import orderReducer from "./order";
+import quotationReducer from "./quotation";
+import purchaseOrderReducer from "./purchaseOrder";
+import salesInvoiceReducer from "./salesInvoice";
+import purchaseInvoiceReducer from "./purchaseInvoice";
+import priceBookReducer from "./priceBook";
+import casesReducer from "./cases";
+import solutionsReducer from "./solutions";
+import campaignsReducer from "./campaign";
+import dealReportReducer from "./dealReport";
+import leadReportReducer from "./leadReport";
+import contactReportReducer from "./contactReport";
+import companyReportReducer from "./companyReport";
+import projectReportReducer from "./projectReport";
+import TaskReportReducer from "./TaskReport";
+import ngAuthReducer from "./redirectCrms";
 
 const store = configureStore({
   reducer: {
@@ -77,30 +78,31 @@ const store = configureStore({
     countries: countriesReducer,
     currency: currencyReducer,
     activities: activitiesReducer,
-    vendor:vendorReducer,
-    meetingTypes:MeetingTypeReducer,
-    modules : modulesReducer,
+    vendor: vendorReducer,
+    meetingTypes: MeetingTypeReducer,
+    modules: modulesReducer,
     permissions: permissionsReducer,
-    attachments : attachmentsReducer,
-    productCategories : productCategoryReducer,
-    manufacturers : manufacturerReducer,
-    products : productsReducer,
-    taxs : taxSetupReducer,
-    orders : orderReducer,
-    quotations : quotationReducer,
-    purchaseOrders : purchaseOrderReducer,
-    salesInvoices : salesInvoiceReducer,
-    purchaseInvoices : purchaseInvoiceReducer,
-    priceBooks : priceBookReducer,
+    attachments: attachmentsReducer,
+    productCategories: productCategoryReducer,
+    manufacturers: manufacturerReducer,
+    products: productsReducer,
+    taxs: taxSetupReducer,
+    orders: orderReducer,
+    quotations: quotationReducer,
+    purchaseOrders: purchaseOrderReducer,
+    salesInvoices: salesInvoiceReducer,
+    purchaseInvoices: purchaseInvoiceReducer,
+    priceBooks: priceBookReducer,
     cases: casesReducer,
-    solutions : solutionsReducer,
-    campaigns : campaignsReducer,
-    dealReport : dealReportReducer,
-    leadReport : leadReportReducer,
-    contactReport : contactReportReducer,
-    companyReport : companyReportReducer,
-    projectReport : projectReportReducer,
-    taskReport : TaskReportReducer,
+    solutions: solutionsReducer,
+    campaigns: campaignsReducer,
+    dealReport: dealReportReducer,
+    leadReport: leadReportReducer,
+    contactReport: contactReportReducer,
+    companyReport: companyReportReducer,
+    projectReport: projectReportReducer,
+    taskReport: TaskReportReducer,
+    ngAuth: ngAuthReducer,
   },
 });
 

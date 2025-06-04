@@ -22,7 +22,11 @@ const Sidebar = () => {
 
   const [subOpen, setSubopen] = useState("");
   const [subsidebar, setSubsidebar] = useState("");
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const isRedirectional = localStorage.getItem("redirectLogin");
+
+  const { user, isAuthenticated } = useSelector((state) =>
+    isRedirectional ? state.ngAuth : state.auth
+  );
   const mobileSidebar = useSelector((state) => state.common?.mobileSidebar);
   const toggleSidebar = (title) => {
     localStorage.setItem("menuOpened", title.label);
@@ -115,15 +119,21 @@ const Sidebar = () => {
                   <Link to="/profile">
                     <img
                       src={
-                        user?.profile_img || "assets/img/profiles/avatar-14.jpg"
+                        user?.mime_type
+                          ? `${user?.mime_type},${user?.template}`
+                          : user?.profile_img ||
+                            "assets/img/profiles/avatar-14.jpg"
                       }
                       className="img-fluid"
                       alt="Profile"
                     />
 
                     <div className="user-names">
-                      <h5>{`${user?.full_name}`}</h5>
-                      <h6>{`${user?.crms_d_user_role?.[0]?.crms_m_role["role_name"]}`}</h6>
+                      <h5>{`${user?.username || user?.full_name}`}</h5>
+                      <h6>
+                        {user?.department_name ||
+                          user?.crms_d_user_role?.[0]?.crms_m_role["role_name"]}
+                      </h6>
                     </div>
                   </Link>
                 </li>

@@ -1,5 +1,6 @@
 import { all_routes } from "../../../../routes/all_routes";
 const route = all_routes;
+const isRedirectional = localStorage.getItem("redirectLogin");
 export const SidebarData = [
   {
     label: "CRM",
@@ -423,29 +424,33 @@ export const SidebarData = [
 
   //   ],
   // },
-  {
-    label: "USER MANAGEMENT",
-    submenuOpen: true,
-    submenuHdr: "Sales",
-    submenu: false,
-    showSubRoute: false,
-    submenuItems: [
-      {
-        label: "Manage Users",
-        link: route.manageusers,
-        icon: "ti ti-file-invoice",
-        showSubRoute: false,
-        submenu: false,
-      },
-      {
-        label: "Roles & Permission",
-        link: route.rolesPermissions,
-        icon: "ti ti-navigation-cog",
-        showSubRoute: false,
-        submenu: false,
-      },
-    ],
-  },
+  ...(!isRedirectional
+    ? [
+        {
+          label: "USER MANAGEMENT",
+          submenuOpen: true,
+          submenuHdr: "Sales",
+          submenu: false,
+          showSubRoute: false,
+          submenuItems: [
+            {
+              label: "Manage Users",
+              link: route.manageusers,
+              icon: "ti ti-file-invoice",
+              showSubRoute: false,
+              submenu: false,
+            },
+            {
+              label: "Roles & Permission",
+              link: route.rolesPermissions,
+              icon: "ti ti-navigation-cog",
+              showSubRoute: false,
+              submenu: false,
+            },
+          ],
+        },
+      ]
+    : []),
 
   // {
   //   label: "Settings",

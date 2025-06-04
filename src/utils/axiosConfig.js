@@ -10,7 +10,14 @@ const apiClient = axios.create({
 // 🔐 Add a request interceptor to attach the token
 apiClient.interceptors.request.use(
   (config) => {
+    const isRedirectional = localStorage.getItem("redirectLogin");
     const token = localStorage.getItem("authToken"); // Or sessionStorage, or a context
+    if (isRedirectional) {
+      const BLApiUrl = localStorage.getItem("BLApiUrl"); // Or sessionStorage, or a context
+      const Domain = localStorage.getItem("Domain"); // Or sessionStorage, or a context
+      config.headers.BLApiUrl = BLApiUrl;
+      config.headers.domain = Domain;
+    }
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

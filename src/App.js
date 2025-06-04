@@ -19,6 +19,7 @@ import {
   publicRoutes,
 } from "./routes/router.link";
 import NoPermissionPage from "./components/common/noPermission";
+import RedirectCRMS from "./pages/Redirection";
 
 const App = () => {
   const dispatch = useDispatch();
@@ -26,14 +27,23 @@ const App = () => {
   const Permissions = localStorage.getItem("permissions")
     ? JSON?.parse(localStorage.getItem("permissions"))
     : [];
+  // const Permissions = [];
+  const isRedirectional = localStorage.getItem("redirectLogin");
 
   const pathName = window.location.pathname;
-  const { isAuthenticated } = useSelector((state) => state.auth);
+
+  const { isAuthenticated } = useSelector((state) => state.ngAuth);
+  console.log("isRedirectional : ", isRedirectional);
+  // const { isAuthenticated } = useSelector((state) =>
+  //   domain == "mowara" ? state.ngAuth : state.auth
+  // );
   useEffect(() => {
     if (pathName !== "/login" && pathName !== "/") {
+      console.log("kjkkjkj");
       dispatch(loadUser());
     }
-  }, [dispatch]);
+    console.log("hiiiiii", localStorage.getItem("redirectLogin"));
+  }, [dispatch, isAuthenticated]);
   const filteredRoutes = isAdmin
     ? privateRoutes
     : privateRoutes?.filter((route) => {
@@ -53,10 +63,18 @@ const App = () => {
           {/* Public Layout and Routes */}
           {!isAuthenticated && (
             <Route path="/" element={<PublicLayout />}>
-              <Route index element={<Login />} />
+              <Route index element={<RedirectCRMS />} />
+              <Route path="/login" element={<RedirectCRMS />} />
+              {/* <Route
+                path="*"
+                element={
+                  !isRedirectional &&
+                  (window.location.href = "https://mowara.dcclogsuite.com")
+                }
+              /> */}
+              {/* <Route index element={<Login />} />
               <Route path="/login" element={<Login />} />
-              <Route path="*" element={<Navigate to="/login" />} />
-              {/* Additional public routes */}
+              <Route path="*" element={<Navigate to="/login" />} /> */}
             </Route>
           )}
 

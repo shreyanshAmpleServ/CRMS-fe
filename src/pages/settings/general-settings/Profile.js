@@ -13,7 +13,7 @@ const Profile = () => {
   const [phone, setPhone] = useState();
   const [address, setAddress] = useState();
   const [selectedAvatar, setSelectedAvatar] = useState();
-  const [isReset,setIsReset] = useState(false)
+  const [isReset, setIsReset] = useState(false);
 
   useEffect(() => {
     dispatch(fetchUserByToken());
@@ -21,20 +21,19 @@ const Profile = () => {
   const { userDetail, loading } = useSelector((state) => state.users);
 
   useEffect(() => {
-
     setName(userDetail?.full_name);
     setPhone(userDetail?.phone);
     setAddress(userDetail?.address);
   }, [userDetail]);
 
   useEffect(() => {
-  if(isReset){  
-    setSelectedAvatar(null)
-    setName(userDetail?.full_name);
-    setPhone(userDetail?.phone);
-    setAddress(userDetail?.address);
-    setIsReset(false)
-}
+    if (isReset) {
+      setSelectedAvatar(null);
+      setName(userDetail?.full_name);
+      setPhone(userDetail?.phone);
+      setAddress(userDetail?.address);
+      setIsReset(false);
+    }
   }, [isReset]);
 
   const handleAvatarChange = (e) => {
@@ -65,7 +64,7 @@ const Profile = () => {
         updateUser({ id: userDetail.id, userData: formData })
       ).unwrap();
       //   closeButton.click();
-        setSelectedAvatar(null);
+      setSelectedAvatar(null);
     } catch (error) {
       //   closeButton.click();
     }
@@ -119,7 +118,7 @@ const Profile = () => {
             <div className="profile-upload-img  mx-auto">
               <ImageWithDatabase
                 className="h-100 rounded"
-                src={ URL.createObjectURL(selectedAvatar)}
+                src={URL.createObjectURL(selectedAvatar)}
               />
             </div>
           ) : userDetail?.profile_img ? (
@@ -136,7 +135,7 @@ const Profile = () => {
               </span>
               <img
                 id="ImgPreview"
-                src="assets/img/profiles/avatar-02.jpg"
+                src="assets/img/profiles/avatar-03.jpg"
                 alt="img"
                 className="preview1"
               />
@@ -237,7 +236,7 @@ const Profile = () => {
 
       {/* Buttons */}
       <div className="text-end">
-        <Link onClick={()=>setIsReset(true)} className="btn btn-light me-2">
+        <Link onClick={() => setIsReset(true)} className="btn btn-light me-2">
           Cancel
         </Link>
         <button type="submit" disabled={loading} className="btn btn-primary">
@@ -294,28 +293,31 @@ const Profile = () => {
 
               {/* Content */}
               <div className="position-relative col-xl-12 col-lg-12">
-              { loading ? <div
-                  style={{
-                    zIndex: 9999,
-                    paddingTop: "30vh",
-                    minHeight: "70vh",
-                    backgroundColor: "rgba(255, 255, 255, 0.33)",
-                  }}
-                  className=" position-absolute d-flex  w-100 top-0   h-100 bg-gray justify-content-center "
-                >
+                {loading ? (
                   <div
-                    className="spinner-border position-absolute d-flex justify-content-center  text-primary"
-                    role="status"
+                    style={{
+                      zIndex: 9999,
+                      paddingTop: "30vh",
+                      minHeight: "70vh",
+                      backgroundColor: "rgba(255, 255, 255, 0.33)",
+                    }}
+                    className=" position-absolute d-flex  w-100 top-0   h-100 bg-gray justify-content-center "
                   >
-                    <span className="visually-hidden">Loading...</span>
+                    <div
+                      className="spinner-border position-absolute d-flex justify-content-center  text-primary"
+                      role="status"
+                    >
+                      <span className="visually-hidden">Loading...</span>
+                    </div>
                   </div>
-                </div>
-               : <div className="card">
-                  <div className="card-body">
-                    <h4 className="fw-semibold mb-3">Profile Settings</h4>
-                    {renderProfileForm()}
+                ) : (
+                  <div className="card">
+                    <div className="card-body">
+                      <h4 className="fw-semibold mb-3">Profile Settings</h4>
+                      {renderProfileForm()}
+                    </div>
                   </div>
-                </div>}
+                )}
               </div>
             </div>
           </div>

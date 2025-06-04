@@ -17,6 +17,7 @@ import { Controller, useForm } from "react-hook-form";
 import { base_path } from "../../../config/environment";
 import ImageWithDatabase from "../ImageFromDatabase";
 import logo_path from "../../../assets/logo-2.png";
+import { logoutUserWithToken } from "../../../redux/redirectCrms";
 
 const Header = () => {
   const route = all_routes;
@@ -25,7 +26,12 @@ const Header = () => {
   const dispatch = useDispatch();
   const mobileSidebar = useSelector((state) => state.common?.mobileSidebar);
   const miniSidebar = useSelector((state) => state.common?.miniSidebar);
-  const { user, isAuthenticated } = useSelector((state) => state.auth);
+  const isRedirectional = localStorage.getItem("redirectLogin");
+
+  const { user, isAuthenticated } = useSelector((state) =>
+    isRedirectional ? state.ngAuth : state.auth
+  );
+  // const { user, isAuthenticated } = useSelector((state) => state.auth);
 
   const { control } = useForm();
 
@@ -61,8 +67,15 @@ const Header = () => {
   const handleLogout = async () => {
     try {
       // Dispatch logoutUser thunk
-      await dispatch(logoutUser()).unwrap(); // Ensures proper error handling
-      navigate(route?.login); // Redirect to login page
+      await dispatch(logoutUser()).unwrap();
+      if (isRedirectional) {
+        const redirectUrl = localStorage.getItem("SubDomain");
+        await dispatch(logoutUserWithToken()).unwrap(); // Ensures proper error handling
+        window.location.href = redirectUrl; // Redirect to login page
+      } else {
+        // await dispatch(logoutUser()).unwrap(); // Ensures proper error handling
+        navigate(route?.login); // Redirect to login page
+      }
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -483,7 +496,10 @@ const Header = () => {
                   <span className="user-letter">
                     <img
                       src={
-                        user?.profile_img || "assets/img/profiles/avatar-14.jpg"
+                        user?.mime_type
+                          ? `${user?.mime_type},${user?.template}`
+                          : user?.profile_img ||
+                            "assets/img/profiles/avatar-14.jpg"
                       }
                       alt="Profile"
                       style={{ height: "100%" }}
@@ -501,14 +517,17 @@ const Header = () => {
                   <Link className="dropdown-item" to={route.profile}>
                     <i className="ti ti-user-pin" /> My Profile
                   </Link>
-                  <Link
-                    className="dropdown-item edit-popup"
-                    to="#"
-                    data-bs-toggle="modal"
-                    data-bs-target="#change_password_modal"
-                  >
-                    <i className="ti ti-password-fingerprint" /> Change Password
-                  </Link>
+                  {!isRedirectional && (
+                    <Link
+                      className="dropdown-item edit-popup"
+                      to="#"
+                      data-bs-toggle="modal"
+                      data-bs-target="#change_password_modal"
+                    >
+                      <i className="ti ti-password-fingerprint" /> Change
+                      Password
+                    </Link>
+                  )}
                   {isAuthenticated && (
                     <Link
                       className="dropdown-item"
@@ -529,7 +548,12 @@ const Header = () => {
           <Link
             to="#"
             className="nav-link dropdown-toggle border-0 "
-            style={{paddingTop: "0.5rem", paddingBottom: "0.5rem", paddingLeft: "1rem", paddingRight: "1rem"}}
+            style={{
+              paddingTop: "0.5rem",
+              paddingBottom: "0.5rem",
+              paddingLeft: "1rem",
+              paddingRight: "1rem",
+            }}
             data-bs-toggle="dropdown"
             aria-expanded="false"
           >
@@ -542,15 +566,21 @@ const Header = () => {
             <Link className="dropdown-item" to={route.profile}>
               <i className="ti ti-user-pin" /> My Profile
             </Link>
+            {!isRedirectional && (
+              <Link
+                className="dropdown-item edit-popup"
+                to="#"
+                data-bs-toggle="modal"
+                data-bs-target="#change_password_modal"
+              >
+                <i className="ti ti-password-fingerprint" /> Change Password
+              </Link>
+            )}
             <Link
-              className="dropdown-item edit-popup"
-              to="#"
-              data-bs-toggle="modal"
-              data-bs-target="#change_password_modal"
+              className="dropdown-item"
+              onClick={handleLogout}
+              to={route.login}
             >
-              <i className="ti ti-password-fingerprint" /> Change Password
-            </Link>
-            <Link className="dropdown-item"  onClick={handleLogout} to={route.login}>
               <i className="ti ti-lock" /> Logout
             </Link>
           </div>
