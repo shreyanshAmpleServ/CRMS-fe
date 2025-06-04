@@ -26,6 +26,7 @@ import { Helmet } from "react-helmet-async";
 
 const Solutions = () => {
   const [view, setView] = useState("list"); 
+  const [isChange,setIsChange] = useState(false)
   const [searchText, setSearchText] = useState("");
   const [sortOrder, setSortOrder] = useState("ascending"); // Sorting
   const [selectedDateRange, setSelectedDateRange] = useState({
@@ -141,7 +142,7 @@ const Solutions = () => {
  
 
   React.useEffect(() => {
-    dispatch(fetchSolutions({search:searchText , ...selectedDateRange}))
+    dispatch(fetchSolutions({search:searchText ,  ...(isChange &&  selectedDateRange ) }))
   }, [dispatch,selectedDateRange, searchText]);
 
   const { solutions , loading, error, success } = useSelector(
@@ -307,6 +308,8 @@ const Solutions = () => {
                     <DateRangePickerComponent
                       selectedDateRange={selectedDateRange}
                       setSelectedDateRange={setSelectedDateRange}
+                      setWhoChange={setIsChange}
+                      ChangeName={true}
                     />
                   </div>
                   <div className="d-flex align-items-center flex-wrap row-gap-2">

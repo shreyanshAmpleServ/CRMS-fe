@@ -25,6 +25,7 @@ import DeleteAlert from "./alert/DeleteAlert.js";
 const CampaignsList = () => {
   // const data = activities_data;
   const {name} = useParams()
+    const [isChange,setIsChange] = useState(false)
   const [view, setView] = useState("list");
   const [filter, setFilter] = useState("");
   const [newFilter,setNewFilter] = useState(name)
@@ -48,7 +49,7 @@ const CampaignsList = () => {
 },[dispatch])
 
  React.useEffect(() => {
-   dispatch(fetchCampaign({ search: searchValue , ...selectedDateRange, filter: filter,filter2:newFilter }));
+   dispatch(fetchCampaign({ search: searchValue , ...(isChange &&  selectedDateRange ), filter: filter,filter2:newFilter }));
  }, [dispatch, searchValue,selectedDateRange, filter,newFilter]);
 
  React.useEffect(()=>{
@@ -335,6 +336,8 @@ const CampaignsList = () => {
                       <DateRangePickerComponent
                       selectedDateRange={selectedDateRange}
                       setSelectedDateRange={setSelectedDateRange}
+                      setWhoChange={setIsChange}
+                      ChangeName={true}
                     />
                     </div>
                         <div className="dropdown me-2">

@@ -36,6 +36,7 @@ const PurchaseOrders = () => {
     endDate: moment(),
   });
   const dispatch = useDispatch();
+    const [isChange,setIsChange] = useState(false)
   const [paginationData , setPaginationData] = useState()
   const [selectedStatus, setSelectedStatus] = useState(null);
   const permissions =JSON?.parse(localStorage.getItem("permissions"))
@@ -202,7 +203,7 @@ const PurchaseOrders = () => {
  
 
   React.useEffect(() => {
-    dispatch(fetchPurchaseOrders({search:searchText, ...selectedDateRange}))
+    dispatch(fetchPurchaseOrders({search:searchText, ...(isChange &&  selectedDateRange ) }))
   }, [dispatch,searchText, selectedDateRange]);
   const { purchaseOrders , loading, error, success } = useSelector(
     (state) => state.purchaseOrders,
@@ -371,6 +372,8 @@ const PurchaseOrders = () => {
                     <DateRangePickerComponent
                       selectedDateRange={selectedDateRange}
                       setSelectedDateRange={setSelectedDateRange}
+                      setWhoChange={setIsChange}
+                      ChangeName={true}
                     />
                   </div>
                   <div className="d-flex align-items-center flex-wrap row-gap-2">

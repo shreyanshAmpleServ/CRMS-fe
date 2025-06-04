@@ -27,7 +27,8 @@ import UnauthorizedImage from "../../components/common/UnAuthorized.js";
 import ViewIconsToggle from "../../components/datatable/ViewIconsToggle";
 import { Helmet } from "react-helmet-async";
 const ContactList = () => {
-  const [view, setView] = useState("list"); 
+  const [view, setView] = useState("list");  
+    const [isChange,setIsChange] = useState(false)
   const [paginationData , setPaginationData] = useState()
   const dispatch = useDispatch();
   const [searchText, setSearchText] = useState(""); // For search
@@ -221,7 +222,7 @@ const ContactList = () => {
 
   // Fetch contacts on component mount
   useEffect(() => {
-    dispatch(fetchContacts({search:searchText , ...selectedDateRange})).unwrap();
+    dispatch(fetchContacts({search:searchText , ...(isChange &&  selectedDateRange )})).unwrap();
   }, [dispatch,searchText,selectedDateRange]);
 
   const { contacts, loading, error, success } = useSelector(
@@ -451,6 +452,8 @@ const ContactList = () => {
                       <DateRangePickerComponent
                         selectedDateRange={selectedDateRange?.startDate ? selectedDateRange  : {startDate:moment(),endDate:moment()}}
                         setSelectedDateRange={setSelectedDateRange}
+                        setWhoChange={setIsChange}
+                      ChangeName={true}
                       />
                     </div>
                     <div className="d-flex align-items-center flex-wrap row-gap-2">

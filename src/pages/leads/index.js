@@ -34,7 +34,8 @@ const LeadList = () => {
   const [selectedLead, setSelectedLead] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [sortOrder, setSortOrder] = useState("ascending");
-
+ 
+  const [isChange,setIsChange] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [selectedPriority, setSelectedPriority] = useState(null);
   const [paginationData , setPaginationData] = useState()
@@ -191,7 +192,7 @@ const LeadList = () => {
   };
 
   React.useEffect(() => {
-    dispatch(fetchLeads({search:searchText,status:selectedStatus  , ...selectedDateRange}));
+    dispatch(fetchLeads({search:searchText,status:selectedStatus  , ...(isChange &&  selectedDateRange )}));
   }, [dispatch,searchText ,selectedStatus, selectedDateRange]);
 
 React.useEffect(()=>{
@@ -351,6 +352,8 @@ React.useEffect(()=>{
                       <DateRangePickerComponent
                         selectedDateRange={selectedDateRange}
                         setSelectedDateRange={setSelectedDateRange}
+                        setWhoChange={setIsChange}
+                      ChangeName={true}
                       />
                     </div>
                     <div className="d-flex align-items-center flex-wrap row-gap-2">

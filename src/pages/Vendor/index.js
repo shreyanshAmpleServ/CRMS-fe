@@ -37,6 +37,7 @@ const Vendor = () => {
 
   const dispatch = useDispatch();
     const [paginationData , setPaginationData] = useState()
+      const [isChange,setIsChange] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState(null);
   const permissions =JSON?.parse(localStorage.getItem("permissions"))
   const allPermissions = permissions?.filter((i)=>i?.module_name === "Vendor")?.[0]?.permissions
@@ -143,7 +144,7 @@ const Vendor = () => {
  
 
   React.useEffect(() => {
-    dispatch(fetchVendors({search:searchText , ...selectedDateRange}));
+    dispatch(fetchVendors({search:searchText ,...(isChange &&  selectedDateRange ) }));
   }, [dispatch,searchText , selectedDateRange]);
   
   const { vendor, loading, error, success } = useSelector(

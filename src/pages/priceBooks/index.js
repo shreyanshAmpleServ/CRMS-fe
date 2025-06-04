@@ -35,6 +35,7 @@ const PriceBook = () => {
   });
   const dispatch = useDispatch();
   const [paginationData , setPaginationData] = useState()
+    const [isChange,setIsChange] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState(null);
   const permissions =JSON?.parse(localStorage.getItem("permissions"))
   const allPermissions = permissions?.filter((i)=>i?.module_name === "Price Book")?.[0]?.permissions
@@ -129,7 +130,7 @@ const PriceBook = () => {
  
 
   React.useEffect(() => {
-    dispatch(fetchPriceBook({search:searchText,...selectedDateRange}))
+    dispatch(fetchPriceBook({search:searchText, ...(isChange &&  selectedDateRange ) }))
   }, [dispatch,searchText,selectedDateRange]);
   const { priceBooks , loading, error, success } = useSelector(
     (state) => state.priceBooks,
@@ -303,6 +304,8 @@ const PriceBook = () => {
                     <DateRangePickerComponent
                       selectedDateRange={selectedDateRange}
                       setSelectedDateRange={setSelectedDateRange}
+                      setWhoChange={setIsChange}
+                      ChangeName={true}
                     />
                   </div>
                   <div className="d-flex align-items-center flex-wrap row-gap-2">

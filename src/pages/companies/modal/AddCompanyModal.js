@@ -166,6 +166,7 @@ const AddCompanyModal = () => {
                           Company Name <span className="text-danger">*</span>
                         </label>
                         <input
+                          placeholder="Enter Company"
                           type="text"
                           className="form-control"
                           {...register("name", {
@@ -185,6 +186,7 @@ const AddCompanyModal = () => {
                           Registration Number
                         </label>
                         <input
+                          placeholder="Enter Registration no."
                           type="text"
                           className="form-control"
                           {...register("registrationNumber")}
@@ -197,6 +199,7 @@ const AddCompanyModal = () => {
                           Email <span className="text-danger">*</span>
                         </label>
                         <input
+                          placeholder="Enter Email"
                           type="email"
                           className="form-control"
                           {...register("email", {
@@ -217,6 +220,7 @@ const AddCompanyModal = () => {
                         </label>
                         <input
                           type="text"
+                          placeholder="Enter Phone"
                           className="form-control"
                           {...register("phone", {
                             required: "Phone number is required",
@@ -233,6 +237,7 @@ const AddCompanyModal = () => {
                       <div className="mb-3">
                         <label className="col-form-label">Website</label>
                         <input
+                          placeholder="Enter Website"
                           type="text"
                           className="form-control"
                           {...register("website")}
@@ -245,6 +250,7 @@ const AddCompanyModal = () => {
                           Industry Type <span className="text-danger">*</span>
                         </label>
                         <input
+                          placeholder="Enter Industry Type"
                           type="text"
                           className="form-control"
                           {...register("industryType", {
@@ -263,6 +269,7 @@ const AddCompanyModal = () => {
                         <label className="col-form-label">Annual Revenue</label>
                         <input
                           type="number"
+                          placeholder="Enter Annual Revenue"
                           step="0.01"
                           className="form-control"
                           {...register("annualRevenue")}
@@ -273,6 +280,7 @@ const AddCompanyModal = () => {
                       <div className="mb-3">
                         <label className="col-form-label">Employee Count</label>
                         <input
+                          placeholder="Enter Employee Count"
                           type="number"
                           className="form-control"
                           {...register("employeeCount")}
@@ -285,6 +293,7 @@ const AddCompanyModal = () => {
                           Business Type <span className="text-danger">*</span>
                         </label>
                         <input
+                          placeholder="Enter Business Type"
                           type="text"
                           className="form-control"
                           {...register("businessType", {
@@ -306,6 +315,7 @@ const AddCompanyModal = () => {
                           <span className="text-danger">*</span>
                         </label>
                         <input
+                          placeholder="Enter Primary Contact"
                           type="text"
                           className="form-control"
                           {...register("primaryContactName", {
@@ -326,6 +336,7 @@ const AddCompanyModal = () => {
                           <span className="text-danger">*</span>
                         </label>
                         <input
+                          placeholder="Enter Primary Contact Role"
                           type="text"
                           className="form-control"
                           {...register("primaryContactRole", {
@@ -346,6 +357,7 @@ const AddCompanyModal = () => {
                           <span className="text-danger">*</span>
                         </label>
                         <input
+                          placeholder="Enter Primary Contact Email"
                           type="email"
                           className="form-control"
                           {...register("primaryContactEmail", {
@@ -366,6 +378,7 @@ const AddCompanyModal = () => {
                           <span className="text-danger">*</span>
                         </label>
                         <input
+                          placeholder="Enter Primary Contact Phone"
                           type="text"
                           className="form-control"
                           {...register("primaryContactPhone", {
@@ -384,6 +397,7 @@ const AddCompanyModal = () => {
                         <label className="col-form-label">Address</label>
                         <textarea
                           className="form-control"
+                          placeholder="Enter Address"
                           rows="3"
                           {...register("address")}
                         ></textarea>

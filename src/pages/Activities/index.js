@@ -29,6 +29,7 @@ const Activities = () => {
   const [isLoading,setIsLoading] = useState(false)
   const [searchValue, setSearchValue] = useState("");
   const [activity, setActivity] = useState();
+    const [isChange,setIsChange] = useState(false)
   const [paginationData , setPaginationData] = useState()
   const [selectedDateRange, setSelectedDateRange] = useState({
       startDate: moment().subtract(180, "days"),
@@ -44,9 +45,8 @@ const Activities = () => {
 },[dispatch])
 
  React.useEffect(() => {
-   dispatch(fetchActivities({ search: searchValue , ...selectedDateRange, filter: filter,filter2:newFilter }));
+   dispatch(fetchActivities({ search: searchValue , ...(isChange &&  selectedDateRange ), filter: filter,filter2:newFilter }));
  }, [dispatch, searchValue,selectedDateRange, filter,newFilter]);
-
  React.useEffect(()=>{
        setPaginationData({
          currentPage:activities?.currentPage,
@@ -260,6 +260,7 @@ const activityTypes = useSelector((state) => state.activities.activityTypes);
                               {item?.name === "Calls" && <li>
                                 <Link
                                   // to={route.activityCalls}
+                                  title="Calls"
                                   to="#"
                                   onClick={()=>{newFilter === "Calls" ? setNewFilter("") : setNewFilter("Calls")}}
                                   data-bs-toggle="tooltip"
@@ -273,6 +274,7 @@ const activityTypes = useSelector((state) => state.activities.activityTypes);
                               {item?.name === "Emails" && <li>
                                 <Link
                                   // to={route.activityMail}
+                                  title="Emails"
                                   to="#"
                                   onClick={()=>{newFilter === "Emails" ? setNewFilter("") : setNewFilter("Emails")}}
                                   data-bs-toggle="tooltip"
@@ -286,6 +288,7 @@ const activityTypes = useSelector((state) => state.activities.activityTypes);
                              {item?.name === "Task" &&  <li>
                                 <Link
                                   // to={route.activityTask}
+                                  title="Task"
                                   to="#"
                                   onClick={()=>{newFilter === "Task" ? setNewFilter("") : setNewFilter("Task")}}
                                   data-bs-toggle="tooltip"
@@ -299,6 +302,7 @@ const activityTypes = useSelector((state) => state.activities.activityTypes);
                              {item?.name === "Meeting" &&<li>
                                 <Link
                                   // to={route.activityMeeting}
+                                  title="Meeting"
                                   to="#"
                                   onClick={()=>{newFilter === "Meeting" ? setNewFilter("") : setNewFilter("Meeting")}}
                                   data-bs-toggle="tooltip"
@@ -319,6 +323,8 @@ const activityTypes = useSelector((state) => state.activities.activityTypes);
                       <DateRangePickerComponent
                       selectedDateRange={selectedDateRange}
                       setSelectedDateRange={setSelectedDateRange}
+                      setWhoChange={setIsChange}
+                      ChangeName={true}
                     />
                     </div>
                         <div className="dropdown me-2">

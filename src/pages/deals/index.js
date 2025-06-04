@@ -38,7 +38,8 @@ const DealList = () => {
     startDate: moment().subtract(180, "days"), // Default start date (Last 7 days)
     endDate: moment(),
   });
-  const [selectedStatus, setSelectedStatus] = useState(null);
+  const [selectedStatus, setSelectedStatus] = useState(null); 
+    const [isChange,setIsChange] = useState(false)
   const [selectedPriority, setSelectedPriority] = useState(null);
   const [paginationData , setPaginationData] = useState()
   const permissions =JSON?.parse(localStorage.getItem("permissions"))
@@ -171,7 +172,7 @@ const DealList = () => {
   );
 
   React.useEffect(() => {
-      dispatch(fetchDeals({search:searchText ,status:selectedStatus,priority:selectedPriority, ...selectedDateRange}));
+      dispatch(fetchDeals({search:searchText ,status:selectedStatus,priority:selectedPriority, ...(isChange &&  selectedDateRange )}));
     }, [dispatch,searchText ,selectedStatus,selectedPriority, selectedDateRange]);
   
   React.useEffect(()=>{
@@ -369,6 +370,8 @@ const DealList = () => {
                       <DateRangePickerComponent
                         selectedDateRange={selectedDateRange}
                         setSelectedDateRange={setSelectedDateRange}
+                        setWhoChange={setIsChange}
+                      ChangeName={true}
                       />
                     </div>
                     {/* End Sort & Filterby Date Range */}

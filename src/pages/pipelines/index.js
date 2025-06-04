@@ -26,7 +26,8 @@ import DateRangePickerComponent from "../../components/datatable/DateRangePicker
 import moment from "moment";
 
 const PipelineList = () => {
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState(""); 
+    const [isChange,setIsChange] = useState(false)
   const [sortOrder, setSortOrder] = useState("ascending"); // Sorting order
   const [selectedPipeline, setSelectedPipeline] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -150,7 +151,7 @@ const PipelineList = () => {
     (state) => state.pipelines,
   );
     React.useEffect(() => {
-      dispatch(fetchPipelines({search:searchText ,status:selectedStatus, ...selectedDateRange}));
+      dispatch(fetchPipelines({search:searchText ,status:selectedStatus,...(isChange &&  selectedDateRange )}));
     }, [dispatch,searchText ,selectedStatus, selectedDateRange]);
   
   React.useEffect(()=>{
@@ -294,6 +295,8 @@ const PipelineList = () => {
                     <DateRangePickerComponent
                       selectedDateRange={selectedDateRange}
                       setSelectedDateRange={setSelectedDateRange}
+                      setWhoChange={setIsChange}
+                      ChangeName={true}
                     />
                   </div>
                   <div className="d-flex align-items-center flex-wrap row-gap-2">

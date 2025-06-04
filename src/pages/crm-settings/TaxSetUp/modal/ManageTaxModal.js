@@ -64,7 +64,7 @@ const ManageTaxModal = ({ tax, setTax }) => {
     }
   }, [tax]);
   useEffect(() => {
-    dispatch(fetchContacts(searchValue));
+    dispatch(fetchContacts({search:searchValue}));
   }, [dispatch, searchValue]);
 
   const { contacts, loading: loadingContact } = useSelector(

@@ -31,6 +31,7 @@ import { Helmet } from "react-helmet-async";
 const ManageUsers = () => {
   const [view, setView] = useState("list"); 
   const dispatch = useDispatch();
+    const [isChange,setIsChange] = useState(false)
   const [paginationData , setPaginationData] = useState()
   const [selectedStatus, setSelectedStatus] = useState(null);
   const [searchText, setSearchText] = useState("");
@@ -136,7 +137,7 @@ const ManageUsers = () => {
   );
 
   React.useEffect(() => {
-    dispatch(fetchUsers({search:searchText, ...selectedDateRange}));
+    dispatch(fetchUsers({search:searchText,  ...(isChange &&  selectedDateRange ) }));
   }, [dispatch,searchText, selectedDateRange]);
 
   React.useEffect(()=>{
@@ -307,6 +308,8 @@ const ManageUsers = () => {
                     <DateRangePickerComponent
                       selectedDateRange={selectedDateRange}
                       setSelectedDateRange={setSelectedDateRange}
+                      setWhoChange={setIsChange}
+                      ChangeName={true}
                     />
                   </div>
                   <div className="d-flex align-items-center flex-wrap row-gap-2">

@@ -38,6 +38,7 @@ const SalesInvoice = () => {
   const dispatch = useDispatch();
   const [paginationData , setPaginationData] = useState()
   const [selectedStatus, setSelectedStatus] = useState(null);
+    const [isChange,setIsChange] = useState(false)
   const permissions =JSON?.parse(localStorage.getItem("permissions"))
   const allPermissions = permissions?.filter((i)=>i?.module_name === "Sales Invoice")?.[0]?.permissions
  const isAdmin = localStorage.getItem("role")?.includes("admin")
@@ -184,7 +185,7 @@ const SalesInvoice = () => {
  
 
   React.useEffect(() => {
-    dispatch(fetchSalesInvoice({search:searchText, ...selectedDateRange}))
+    dispatch(fetchSalesInvoice({search:searchText,...(isChange &&  selectedDateRange ) }))
   }, [dispatch,searchText, selectedDateRange]);
   const { salesInvoices , loading, error, success } = useSelector(
     (state) => state.salesInvoices,
@@ -355,6 +356,8 @@ const SalesInvoice = () => {
                     <DateRangePickerComponent
                       selectedDateRange={selectedDateRange}
                       setSelectedDateRange={setSelectedDateRange}
+                      setWhoChange={setIsChange}
+                      ChangeName={true}
                     />
                   </div>
                   <div className="d-flex align-items-center flex-wrap row-gap-2">

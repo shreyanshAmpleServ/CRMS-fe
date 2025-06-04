@@ -1139,6 +1139,7 @@ const AddContactModal = ({ contact, setSelectedContact }) => {
                       <div className="mb-3">
                         <label className="col-form-label">Facebook</label>
                         <input
+                          placeholder="www.facebook.com"
                           type="text"
                           className="form-control"
                           {...register("socialProfiles.facebook")}
@@ -1149,6 +1150,7 @@ const AddContactModal = ({ contact, setSelectedContact }) => {
                       <div className="mb-3">
                         <label className="col-form-label">Skype </label>
                         <input
+                          placeholder="www.skype.com"
                           type="text"
                           className="form-control"
                           {...register("socialProfiles.skype")}
@@ -1160,6 +1162,7 @@ const AddContactModal = ({ contact, setSelectedContact }) => {
                         <label className="col-form-label">Linkedin </label>
                         <input
                           type="text"
+                          placeholder="www.linkedin.com"
                           className="form-control"
                           {...register("socialProfiles.linkedin")}
                         />
@@ -1170,6 +1173,7 @@ const AddContactModal = ({ contact, setSelectedContact }) => {
                         <label className="col-form-label">Twitter</label>
                         <input
                           type="text"
+                          placeholder="www.twitter.com"
                           className="form-control"
                           {...register("socialProfiles.twitter")}
                         />
@@ -1180,6 +1184,7 @@ const AddContactModal = ({ contact, setSelectedContact }) => {
                         <label className="col-form-label">Whatsapp</label>
                         <input
                           type="text"
+                          placeholder="+91 91xxxxxxxxx"
                           className="form-control"
                           {...register("socialProfiles.whatsapp")}
                         />
@@ -1189,6 +1194,7 @@ const AddContactModal = ({ contact, setSelectedContact }) => {
                       <div className="mb-0">
                         <label className="col-form-label">Instagram</label>
                         <input
+                          placeholder="www.instagram.com"
                           type="text"
                           className="form-control"
                           {...register("socialProfiles.instagram")}

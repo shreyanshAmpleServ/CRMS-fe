@@ -34,7 +34,8 @@ const DocumentLists = () => {
   const [isRange,setIsRange] = useState(false)
   const [filteredType, setFilteredType] = useState();
   const [selectedStatus, setSelectedStatus] = useState(null);
-  const [searchText, setSearchText] = useState("");
+  const [searchText, setSearchText] = useState(""); 
+    const [isChange,setIsChange] = useState(false)
   const [sortOrder, setSortOrder] = useState("ascending"); // Sorting
   const [selectedDateRange, setSelectedDateRange] = useState({
     startDate: moment().subtract(180, "days"),
@@ -233,7 +234,7 @@ const DocumentLists = () => {
   );
 
   React.useEffect(() => {
-    dispatch(fetchAttachment({filteredType ,search:searchText, ...selectedDateRange}));
+    dispatch(fetchAttachment({filteredType ,search:searchText, ...(isChange &&  selectedDateRange )}));
   }, [dispatch , filteredType,searchText,selectedDateRange]);
 
   React.useEffect(()=>{
@@ -399,7 +400,8 @@ const DocumentLists = () => {
                     <DateRangePickerComponent
                       selectedDateRange={selectedDateRange}
                       setSelectedDateRange={setSelectedDateRange}
-                      setIsRange={setIsRange}
+                      setWhoChange={setIsChange}
+                      ChangeName={true}
                     />
                   </div>
                   <div className="d-flex align-items-center flex-wrap row-gap-2">

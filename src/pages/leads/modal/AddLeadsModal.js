@@ -1146,6 +1146,7 @@ const AddLeadModal = ({ setSelectedLead, selectedLead }) => {
                       <div className="mb-3">
                         <label className="col-form-label">Facebook</label>
                         <input
+                          placeholder="www.facebook.com"
                           type="text"
                           className="form-control"
                           {...register("facebook_ac")}
@@ -1156,6 +1157,7 @@ const AddLeadModal = ({ setSelectedLead, selectedLead }) => {
                       <div className="mb-3">
                         <label className="col-form-label">Skype </label>
                         <input
+                          placeholder="www.skype.com"
                           type="text"
                           className="form-control"
                           {...register("skype_id")}
@@ -1167,6 +1169,7 @@ const AddLeadModal = ({ setSelectedLead, selectedLead }) => {
                         <label className="col-form-label">Linkedin </label>
                         <input
                           type="text"
+                          placeholder="www.linkedin.com"
                           className="form-control"
                           {...register("linked_in_ac")}
                         />
@@ -1177,6 +1180,7 @@ const AddLeadModal = ({ setSelectedLead, selectedLead }) => {
                         <label className="col-form-label">Twitter</label>
                         <input
                           type="text"
+                          placeholder="www.twitter.com"
                           className="form-control"
                           {...register("twitter_ac")}
                         />
@@ -1187,6 +1191,7 @@ const AddLeadModal = ({ setSelectedLead, selectedLead }) => {
                         <label className="col-form-label">Whatsapp</label>
                         <input
                           type="text"
+                          placeholder="+91 98xxxxxxxx"
                           className="form-control"
                           {...register("whatsapp_ac")}
                         />
@@ -1196,6 +1201,7 @@ const AddLeadModal = ({ setSelectedLead, selectedLead }) => {
                       <div className="mb-0">
                         <label className="col-form-label">Instagram</label>
                         <input
+                          placeholder="www.instagram.com"
                           type="text"
                           className="form-control"
                           {...register("instagram_ac")}

@@ -35,7 +35,8 @@ const Orders = () => {
   const [selectedDateRange, setSelectedDateRange] = useState({
     startDate: moment().subtract(180, "days"),
     endDate: moment(),
-  });
+  }); 
+    const [isChange,setIsChange] = useState(false)
   const dispatch = useDispatch();
   const [paginationData , setPaginationData] = useState()
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -205,7 +206,7 @@ const Orders = () => {
  
 
   React.useEffect(() => {
-    dispatch(fetchorders({search:searchText, ...selectedDateRange}))
+    dispatch(fetchorders({search:searchText, ...(isChange &&  selectedDateRange )}))
   }, [dispatch,searchText, selectedDateRange]);
   const { orders , loading, error, success } = useSelector(
     (state) => state.orders,
@@ -374,6 +375,8 @@ const Orders = () => {
                     <DateRangePickerComponent
                       selectedDateRange={selectedDateRange}
                       setSelectedDateRange={setSelectedDateRange}
+                      setWhoChange={setIsChange}
+                      ChangeName={true}
                     />
                   </div>
                   <div className="d-flex align-items-center flex-wrap row-gap-2">

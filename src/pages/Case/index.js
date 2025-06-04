@@ -35,6 +35,7 @@ const Cases = () => {
     startDate: moment().subtract(180, "days"),
     endDate: moment(),
   });
+  const [isChange,setIsChange] = useState(false)
   const dispatch = useDispatch();
   const [paginationData , setPaginationData] = useState()
   const [selectedStatus, setSelectedStatus] = useState(null);
@@ -175,7 +176,7 @@ const Cases = () => {
  
 
   React.useEffect(() => {
-    dispatch(fetchCases({search:searchText,...selectedDateRange}))
+    dispatch(fetchCases({search:searchText,...(isChange &&  selectedDateRange )}))
   }, [dispatch,selectedDateRange, searchText]);
 
   const { cases , loading, error, success } = useSelector(
@@ -344,6 +345,8 @@ const Cases = () => {
                     <DateRangePickerComponent
                       selectedDateRange={selectedDateRange}
                       setSelectedDateRange={setSelectedDateRange}
+                      setWhoChange={setIsChange}
+                      ChangeName={true}
                     />
                   </div>
                   <div className="d-flex align-items-center flex-wrap row-gap-2">

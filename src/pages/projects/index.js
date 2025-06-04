@@ -33,6 +33,7 @@ const ProjectList = () => {
   const [view, setView] = useState("list"); // 'list' or 'grid'
   const [paginationData , setPaginationData] = useState()
   const dispatch = useDispatch();
+    const [isChange,setIsChange] = useState(false)
   const [searchText, setSearchText] = useState("");
   const [sortOrder, setSortOrder] = useState("ascending"); // Sorting
   const [selectedDateRange, setSelectedDateRange] = useState({
@@ -148,7 +149,7 @@ const ProjectList = () => {
   ];
   
     React.useEffect(() => {
-      dispatch(fetchProjects({ search:searchText , ...selectedDateRange}));
+      dispatch(fetchProjects({ search:searchText , ...(isChange &&  selectedDateRange ) }));
     }, [dispatch,searchText,selectedDateRange]);
   const { projects, loading, error, success } = useSelector(
     (state) => state.projects,
@@ -318,6 +319,8 @@ const ProjectList = () => {
                     <DateRangePickerComponent
                       selectedDateRange={selectedDateRange}
                       setSelectedDateRange={setSelectedDateRange}
+                      setWhoChange={setIsChange}
+                      ChangeName={true}
                     />
                   </div>
                   <div className="d-flex align-items-center flex-wrap row-gap-2">

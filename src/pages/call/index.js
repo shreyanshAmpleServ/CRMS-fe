@@ -28,6 +28,7 @@ import { Helmet } from "react-helmet-async";
 const LeadList = () => {
   const [callsDetails, setCallDetails] = useState()
   const [view, setView] = useState("list"); // 'list' or 'grid'
+    const [isChange,setIsChange] = useState(false)
   const [showFlashModal, setShowFlashModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -226,7 +227,7 @@ const LeadList = () => {
   };
 
   React.useEffect(() => {
-    dispatch(fetchCalls({search:searchText,callType:selectedType,category:selectedCategory, ...selectedDateRange}));
+    dispatch(fetchCalls({search:searchText,callType:selectedType,category:selectedCategory, ...(isChange &&  selectedDateRange )}));
   }, [dispatch, searchText , selectedType,selectedCategory,selectedDateRange]);
 
     React.useEffect(()=>{
@@ -400,6 +401,8 @@ const LeadList = () => {
                       <DateRangePickerComponent
                         selectedDateRange={selectedDateRange}
                         setSelectedDateRange={setSelectedDateRange}
+                        setWhoChange={setIsChange}
+                        ChangeName={true}
                       />
                     </div>
                     <div className="d-flex align-items-center flex-wrap row-gap-2">

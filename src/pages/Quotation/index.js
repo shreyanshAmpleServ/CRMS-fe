@@ -38,6 +38,7 @@ const Quotation = () => {
   const dispatch = useDispatch();
   const [paginationData , setPaginationData] = useState()
   const [selectedStatus, setSelectedStatus] = useState(null);
+    const [isChange,setIsChange] = useState(false)
   const permissions =JSON?.parse(localStorage.getItem("permissions"))
   const allPermissions = permissions?.filter((i)=>i?.module_name === "Quotation")?.[0]?.permissions
  const isAdmin = localStorage.getItem("role")?.includes("admin")
@@ -185,7 +186,7 @@ const Quotation = () => {
  
 
   React.useEffect(() => {
-    dispatch(fetchquotations({search:searchText, ...selectedDateRange}))
+    dispatch(fetchquotations({search:searchText,  ...(isChange &&  selectedDateRange ) }))
   }, [dispatch,searchText, selectedDateRange]);
   const { quotations , loading, error, success } = useSelector(
     (state) => state.quotations,
@@ -354,6 +355,8 @@ const Quotation = () => {
                     <DateRangePickerComponent
                       selectedDateRange={selectedDateRange}
                       setSelectedDateRange={setSelectedDateRange}
+                      setWhoChange={setIsChange}
+                      ChangeName={true}
                     />
                   </div>
                   <div className="d-flex align-items-center flex-wrap row-gap-2">
