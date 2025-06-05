@@ -99,6 +99,15 @@ const Sidebar = () => {
   const toggleMobileSidebar = () => {
     dispatch(setMobileSidebar(!mobileSidebar));
   };
+  useEffect(() => {
+    const getTheme = ()=>{
+      const theme = localStorage.getItem("dataTheme") || "light";
+      document.documentElement.setAttribute("data-theme", theme);
+    }
+    if ( isAuthenticated) {
+      getTheme()
+    }
+  }, [isAuthenticated]);
   return (
     <>
       <div
@@ -115,12 +124,13 @@ const Sidebar = () => {
                   <Link to="/profile">
                     <img
                       src={
-                        user?.profile_img || "assets/img/profiles/avatar-14.jpg"
+                        user?.profile_img ? user?.profile_img : "assets/img/profiles/avatar-14.jpg"
                       }
                       className="img-fluid"
                       alt="Profile"
                     />
-
+                        {/* user?.profile_img ? user?.profile_img : "assets/img/profiles/avatar-14.jpg" */}
+                        {console.log("img : ",user?.profile_img ? user?.profile_img : "assets/img/profiles/avatar-14.jpg")}
                     <div className="user-names">
                       <h5>{`${user?.full_name}`}</h5>
                       <h6>{`${user?.crms_d_user_role?.[0]?.crms_m_role["role_name"]}`}</h6>

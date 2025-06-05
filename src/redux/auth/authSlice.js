@@ -55,6 +55,7 @@ export const loginUser = createAsyncThunk(
       localStorage.setItem("role", userData?.data?.role);
       localStorage.setItem("authToken", userData?.data?.Token);
       localStorage.setItem("user", JSON.stringify(userData?.data)); // Persist user dat
+      localStorage.setItem("dataTheme", "light"); // Persist user dat
       return userData; // Backend should send user info
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || "Login failed");

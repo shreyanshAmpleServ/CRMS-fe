@@ -113,11 +113,11 @@ const AddUserModal = () => {
           <i className="ti ti-x" />
         </button>
       </div>
-      <div className="offcanvas-body">
-        <form onSubmit={handleSubmit(onSubmit)}>
+      <div className="offcanvas-body accordion-item">
+        <form className= "accordion-body" onSubmit={handleSubmit(onSubmit)}>
           <input type="hidden" {...register("entityType", { value: "user" })} />
           <input type="hidden" {...register("username", { value: watch('email') })} />
-          <div className="row">
+          <div className="row ">
             {/* Profile Image Upload */}
             <div className="col-md-12">
               <div className="profile-pic-upload">

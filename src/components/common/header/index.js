@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import ImageWithBasePath from "../imageWithBasePath";
 import { all_routes } from "../../../routes/all_routes";
@@ -73,6 +73,7 @@ const Header = () => {
       navigate(selectedOption.path);
     }
   };
+
 
   return (
     <>
@@ -483,7 +484,7 @@ const Header = () => {
                   <span className="user-letter">
                     <img
                       src={
-                        user?.profile_img || "assets/img/profiles/avatar-14.jpg"
+                        user?.profile_img ? user?.profile_img : "assets/img/profiles/avatar-14.jpg"
                       }
                       alt="Profile"
                       style={{ height: "100%" }}
@@ -525,7 +526,7 @@ const Header = () => {
           </ul>
         </div>
         {/* Mobile Menu */}
-        <div className="dropdown mobile-user-menu my-auto mt-2 ">
+        <div className="dropdown mobile-user-menu my-auto mt-2 ">   
           <Link
             to="#"
             className="nav-link dropdown-toggle border-0 "

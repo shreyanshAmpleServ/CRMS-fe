@@ -289,7 +289,7 @@ const handleAvatarChange = (e) => {
       }, []);
   return (
     <div
-    className="offcanvas offcanvas-end offcanvas-large"
+    className="offcanvas accordion-item offcanvas-end offcanvas-large"
     tabIndex={-1}
     id="offcanvas_add_edit_quotation"
   >
@@ -305,8 +305,8 @@ const handleAvatarChange = (e) => {
         <i className="ti ti-x" />
       </button>
     </div>
-    <div className="offcanvas-body">
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <div className="offcanvas-body accordion-body">
+    <form className="" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <div className="row">
                  {/* Vendor  */}
