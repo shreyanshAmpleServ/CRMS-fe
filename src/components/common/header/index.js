@@ -10,7 +10,7 @@ import {
 } from "../../../redux/common/commonSlice";
 import { logoutUser } from "../../../redux/auth/authSlice";
 import Logo from "../logo";
-import ChangePassword from "./ChangePassword";
+// import ChangePassword from "./ChangePassword";
 import { ModuleOptions } from "../selectoption/selectoption";
 import Select from "react-select";
 import { Controller, useForm } from "react-hook-form";
@@ -587,7 +587,7 @@ const Header = () => {
         </div>
         {/* /Mobile Menu */}
       </div>
-      <ChangePassword />
+      {/* <ChangePassword /> */}
     </>
   );
 };

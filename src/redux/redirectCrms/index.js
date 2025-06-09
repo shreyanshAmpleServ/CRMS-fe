@@ -37,9 +37,12 @@ export const loginWithToken = createAsyncThunk(
           },
         }
       );
-      console.log("Response : ", response);
       const userData = response.data.data;
-
+      const user = localStorage.getItem("user")
+      const module = localStorage.getItem("module")
+      const decodedString =user ?  atob(user) : null;
+      const decodedmodule = atob(module);
+      console.log("User", decodedString , decodedmodule)
       localStorage.setItem("isAuthenticated", "true");
       localStorage.setItem(
         "permissions",
@@ -51,10 +54,9 @@ export const loginWithToken = createAsyncThunk(
             ? JSON.stringify(userData?.data?.permissions)
             : userData?.data?.permissions?.permissions
       );
-
       // localStorage.setItem("role_id", userData?.data?.role_id);
       localStorage.setItem("redirectLogin", true);
-      localStorage.setItem("role", "admin");
+      localStorage.setItem("role",decodedString ? JSON.parse(decodedString) : "admin");
       localStorage.setItem("BLApiUrl", userData?.BLApiUrl);
       localStorage.setItem("Domain", userData?.Domain);
       localStorage.setItem("api_url", userData?.api_url);
@@ -113,7 +115,11 @@ export const loadUser = createAsyncThunk(
         withCredentials: true,
       });
       const userData = response.data;
-
+      const user = localStorage.getItem("user")
+      const decodedString = atob(user);
+      const module = localStorage.getItem("module")
+      const decodedmodule = atob(module);
+      console.log("User", decodedString , decodedmodule)
       localStorage.setItem("user", JSON.stringify(userData?.data)); // Persist user dat
       return userData; // Backend should return user info
     } catch (error) {

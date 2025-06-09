@@ -31,19 +31,17 @@ const App = () => {
   const isRedirectional = localStorage.getItem("redirectLogin");
 
   const pathName = window.location.pathname;
-
   const { isAuthenticated } = useSelector((state) => state.ngAuth);
   console.log("isRedirectional : ", isRedirectional);
   // const { isAuthenticated } = useSelector((state) =>
   //   domain == "mowara" ? state.ngAuth : state.auth
   // );
-  useEffect(() => {
-    if (pathName !== "/login" && pathName !== "/") {
-      console.log("kjkkjkj");
-      dispatch(loadUser());
-    }
-    console.log("hiiiiii", localStorage.getItem("redirectLogin"));
-  }, [dispatch, isAuthenticated]);
+  // useEffect(() => {
+  //   if (pathName !== "/login" && pathName !== "/") {
+  //     console.log("kjkkjkj");
+  //     dispatch(loadUser());
+  //   }
+  // }, [dispatch, isAuthenticated]);
   const filteredRoutes = isAdmin
     ? privateRoutes
     : privateRoutes?.filter((route) => {

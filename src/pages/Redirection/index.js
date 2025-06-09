@@ -43,19 +43,21 @@ const RedirectCRMS = () => {
   //       // Avoid crashing and reloading the page
   //     }
   //   };
+  const Token = localStorage.getItem("token")
+  console.log("Token from local storage ; ", Token)
   useEffect(() => {
     const performLogin = async () => {
       localStorage.setItem("menuOpened", "Dashboard");
       const result = await dispatch(
         loginWithToken({
           token:
-            "eyJhbGciOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.eyJ1c2VyaWQiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsImRibmFtZSI6IkRDQ0J1c2luZXNzU3VpdGVfbW93YXJhIiwibmJmIjoxNzQ4OTU1NDQ5LCJleHAiOjE3NDkxMzU0NDksImlhdCI6MTc0ODk1NTQ0OX0.qx2D-LL5k5Ss_T_PEWf-GsY2F9-yjKFLGsAEdP04ySeb8JxH5saQ3Jh3lHkmfNh0qjc9g_uYxoDpbWhN25geEw",
+            Token || "eyJhbGciOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.eyJ1c2VyaWQiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsImRibmFtZSI6IkRDQ0J1c2luZXNzU3VpdGVfbW93YXJhIiwibmJmIjoxNzQ5NDQzMDg5LCJleHAiOjE3NDk2MjMwODksImlhdCI6MTc0OTQ0MzA4OX0.KHwKQl2t6vK-izruFUGLyFdI7uV0P5fIfh8ERTyLbpmx4m-XaIvF5tQsjhr_TsAgMkkmehHHHNuHCJnaeyNNdg",
           Domain: "mowara",
         })
       );
       if (loginWithToken.fulfilled.match(result)) {
         navigate("/");
-        console.log("Login : ", loginWithToken.fulfilled.match(result));
+        // console.log("Login : ", loginWithToken.fulfilled.match(result));
       } else {
         console.error("Login failed:", result.payload || result.error);
       }

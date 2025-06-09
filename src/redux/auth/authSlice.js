@@ -36,7 +36,6 @@ export const loginUser = createAsyncThunk(
           },
         }
       );
-      console.log("Response : ", response);
       const userData = response.data;
 
       localStorage.setItem("isAuthenticated", "true");
@@ -106,7 +105,7 @@ const authSlice = createSlice({
   name: "auth",
   initialState: {
     isAuthenticated: localStorage.getItem("isAuthenticated") === "true", // Load initial state from localStorage
-    user: JSON.parse(localStorage.getItem("user")) || null,
+    // user: JSON.parse(localStorage.getItem("user")) || null,
     loading: false,
     error: null,
   },

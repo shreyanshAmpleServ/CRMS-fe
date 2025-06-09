@@ -11,6 +11,8 @@ const Profile = () => {
   const dispatch = useDispatch();
   const [name, setName] = useState();
   const [phone, setPhone] = useState();
+  const [email, setEmail] = useState();
+  const [department, setDepartment] = useState();
   const [address, setAddress] = useState();
   const [selectedAvatar, setSelectedAvatar] = useState();
   const [isReset, setIsReset] = useState(false);
@@ -20,21 +22,33 @@ const Profile = () => {
   }, [dispatch]);
   const { userDetail, loading } = useSelector((state) => state.users);
 
+  const user = JSON.parse(localStorage.getItem("user"))
   useEffect(() => {
-    setName(userDetail?.full_name);
-    setPhone(userDetail?.phone);
-    setAddress(userDetail?.address);
-  }, [userDetail]);
+    setSelectedAvatar( user?.mime_type
+      ? `${user?.mime_type},${user?.template}`
+      : user?.profile_img ||
+        "assets/img/profiles/avatar-14.jpg")
+    setName(user?.username);
+    setPhone(user?.phoneno);
+    setEmail(user?.email);
+    setDepartment(user?.department_name);
+    setAddress(user?.address);
+  }, [user]);
+  // useEffect(() => {
+  //   setName(userDetail?.full_name);
+  //   setPhone(userDetail?.phone);
+  //   setAddress(userDetail?.address);
+  // }, [userDetail]);
 
-  useEffect(() => {
-    if (isReset) {
-      setSelectedAvatar(null);
-      setName(userDetail?.full_name);
-      setPhone(userDetail?.phone);
-      setAddress(userDetail?.address);
-      setIsReset(false);
-    }
-  }, [isReset]);
+  // useEffect(() => {
+  //   if (isReset) {
+  //     setSelectedAvatar(null);
+  //     setName(userDetail?.full_name);
+  //     setPhone(userDetail?.phone);
+  //     setAddress(userDetail?.address);
+  //     setIsReset(false);
+  //   }
+  // }, [isReset]);
 
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
@@ -42,33 +56,32 @@ const Profile = () => {
       setSelectedAvatar(file);
     }
   };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData();
-    formData.append("full_name", name);
-    formData.append("phone", phone);
-    formData.append("address", address);
-    formData.append("username", userDetail?.username);
-    formData.append("email", userDetail?.email);
-    formData.append("is_active", userDetail?.is_active);
-    formData.append(
-      "role_id",
-      userDetail?.crms_d_user_role?.[0]?.crms_m_role?.id
-    );
-    if (selectedAvatar) {
-      formData.append("profile_img", selectedAvatar);
-    }
-    console.log("FormData : ", ...formData);
-    try {
-      await dispatch(
-        updateUser({ id: userDetail.id, userData: formData })
-      ).unwrap();
-      //   closeButton.click();
-      setSelectedAvatar(null);
-    } catch (error) {
-      //   closeButton.click();
-    }
-  };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const formData = new FormData();
+  //   formData.append("full_name", name);
+  //   formData.append("phone", phone);
+  //   formData.append("address", address);
+  //   formData.append("username", userDetail?.username);
+  //   formData.append("email", userDetail?.email);
+  //   formData.append("is_active", userDetail?.is_active);
+  //   formData.append(
+  //     "role_id",
+  //     userDetail?.crms_d_user_role?.[0]?.crms_m_role?.id
+  //   );
+  //   if (selectedAvatar) {
+  //     formData.append("profile_img", selectedAvatar);
+  //   }
+  //   try {
+  //     await dispatch(
+  //       updateUser({ id: userDetail.id, userData: formData })
+  //     ).unwrap();
+  //     //   closeButton.click();
+  //     setSelectedAvatar(null);
+  //   } catch (error) {
+  //     //   closeButton.click();
+  //   }
+  // };
 
   // const renderNavTabs = () => (
   //     <ul className="nav nav-tabs nav-tabs-bottom">
@@ -109,7 +122,7 @@ const Profile = () => {
   // );
 
   const renderProfileForm = () => (
-    <form onSubmit={handleSubmit}>
+    <form >
       {/* Employee Info */}
       {/* <SectionHeader title="Employee Information" description="Provide the information below" /> */}
       <div className="mb-3">
@@ -118,7 +131,8 @@ const Profile = () => {
             <div className="profile-upload-img  mx-auto">
               <ImageWithDatabase
                 className="h-100 rounded"
-                src={URL.createObjectURL(selectedAvatar)}
+                src={selectedAvatar}
+                // src={URL.createObjectURL(selectedAvatar)}
               />
             </div>
           ) : userDetail?.profile_img ? (
@@ -148,7 +162,7 @@ const Profile = () => {
               </button>
             </div>
           )}
-          <div className="profile-upload-content">
+          {/* <div className="profile-upload-content">
             <label className="profile-upload-btns">
               <i className="ti ti-pencil" />
               <input
@@ -159,7 +173,7 @@ const Profile = () => {
                 className="input-img"
               />
             </label>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -169,7 +183,8 @@ const Profile = () => {
           {[
             {
               label: "Full Name",
-              required: true,
+              // required: true,
+              disable: true,
               value: name,
               onChanges: (e) => {
                 setName(e.target.value);
@@ -178,27 +193,31 @@ const Profile = () => {
             },
             {
               label: "Username/Email",
-              required: true,
+              // required: true,
               disable: true,
-              value: userDetail?.email,
+              value: email,
+              // value: userDetail?.email,
               onChanges: (e) => {},
             },
             {
-              label: "Role",
-              required: true,
+              label: "Department",
+              // required: true,
               disable: true,
-              value: userDetail?.role,
+              value: department,
+              // value: userDetail?.role,
               onChanges: (e) => {},
             },
             {
               label: "Phone",
-              required: true,
+              // required: true,
               value: phone,
+              disable: true,
               onChanges: (e) => setPhone(e.target.value),
             },
             {
               label: "Address",
-              required: true,
+              // required: true,
+              disable: true,
               value: address,
               onChanges: (e) => setAddress(e.target.value),
             },
@@ -235,7 +254,7 @@ const Profile = () => {
             </div> */}
 
       {/* Buttons */}
-      <div className="text-end">
+      {/* <div className="text-end">
         <Link onClick={() => setIsReset(true)} className="btn btn-light me-2">
           Cancel
         </Link>
@@ -254,7 +273,7 @@ const Profile = () => {
             </div>
           )}
         </button>
-      </div>
+      </div> */}
     </form>
   );
 
