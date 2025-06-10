@@ -619,7 +619,7 @@ export const privateRoutes = [
   {
     path: "/",
     name: "Root",
-    element: <Navigate to="/login" />,
+    element: <Navigate to="/crms/login" />,
     route: Route,
     title: "Login",
   },

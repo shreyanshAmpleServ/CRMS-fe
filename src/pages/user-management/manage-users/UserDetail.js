@@ -43,7 +43,7 @@ const UserDetail = () => {
   const deleteData = () => {
     if (userDetail) {
       dispatch(deleteUser(userDetail.id)); // Dispatch the delete action
-      navigate(`/users`); // Navigate to the specified route
+      // navigate(`/users`); // Navigate to the specified route
       setShowDeleteModal(false); // Close the modal
     }
   };

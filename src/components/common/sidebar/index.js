@@ -10,6 +10,7 @@ import {
 } from "../../../redux/common/commonSlice";
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
+import { loadUser } from "../../../redux/redirectCrms";
 
 const Sidebar = () => {
   const Location = useLocation();
@@ -24,9 +25,14 @@ const Sidebar = () => {
   const [subsidebar, setSubsidebar] = useState("");
   const isRedirectional = localStorage.getItem("redirectLogin");
 
-  const { user, isAuthenticated } = useSelector((state) =>
-    isRedirectional ? state.ngAuth : state.auth
-  );
+//   const { user, isAuthenticated } = useSelector((state) =>
+//  state.ngAuth 
+//   );
+  const user = JSON.parse(localStorage.getItem("userDetails"))
+  // console.log("User",user)
+  // useEffect(()=>{
+  //   loadUser()
+  // },[localStorage.getItem("userDetails")])
   const mobileSidebar = useSelector((state) => state.common?.mobileSidebar);
   const toggleSidebar = (title) => {
     localStorage.setItem("menuOpened", title.label);
@@ -116,7 +122,7 @@ const Sidebar = () => {
             <div id="sidebar-menu" className="sidebar-menu">
               <ul>
                 <li className="clinicdropdown theme">
-                  <Link to="/profile">
+                  <Link to="#">
                     <img
                       src={
                         user?.mime_type

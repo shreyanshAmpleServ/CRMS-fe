@@ -2,8 +2,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import moment from "moment"
+import { all_routes } from "../../../routes/all_routes";
 
 const DealKanbanCard = ({ deal, stage, dealContainerID }) => {
+  const route = all_routes;
   return (
     <div className="card kanban-card border" data-id={dealContainerID}>
       <div className="card-body">
@@ -14,13 +16,13 @@ const DealKanbanCard = ({ deal, stage, dealContainerID }) => {
           />
           <div className="d-flex align-items-center mb-3">
             <Link
-              to="/deal-details"
+              to={`${route}/${deal.id}`}
               className="avatar avatar-lg bg-gray flex-shrink-0 me-2"
             >
               <span className="avatar-title text-dark">Deal</span>
             </Link>
             <h6 className="fw-medium">
-              <Link to="/deal-details">{deal.name}</Link>
+              <Link to={`${route}/${deal.id}`}>{deal.name}</Link>
             </h6>
           </div>
         </div>

@@ -29,7 +29,7 @@ const App = () => {
     : [];
   // const Permissions = [];
   const isRedirectional = localStorage.getItem("redirectLogin");
-
+console.log("is Auth  : ",localStorage.getItem("isAuthenticated") === "true")
   const pathName = window.location.pathname;
   const { isAuthenticated } = useSelector((state) => state.ngAuth);
   console.log("isRedirectional : ", isRedirectional);
@@ -63,29 +63,25 @@ const App = () => {
             <Route path="/" element={<PublicLayout />}>
               <Route index element={<RedirectCRMS />} />
               <Route path="/login" element={<RedirectCRMS />} />
-              {/* <Route
+              <Route
                 path="*"
-                element={
-                  !isRedirectional &&
-                  (window.location.href = "https://mowara.dcclogsuite.com")
-                }
-              /> */}
+                element={<RedirectCRMS />} 
+                // element={
+                //   !isRedirectional &&
+                //   (window.location.href = "https://mowara.dcclogsuite.com")
+                // }
+              />
               {/* <Route index element={<Login />} />
               <Route path="/login" element={<Login />} />
               <Route path="*" element={<Navigate to="/login" />} /> */}
             </Route>
           )}
-
           {/* Private Layout and Routes */}
           {isAuthenticated && filteredRoutes?.length > 0 ? (
             <Route path="/" element={<PrivateLayout />}>
               <Route
                 index
-                element={
-                  filteredRoutes[0]?.element || (
-                    <Navigate to={filteredRoutes[0]?.path || "/"} />
-                  )
-                }
+                element={  <Navigate to={filteredRoutes[0]?.path || "/crms"} replace />   }
               />
               {/* <Route index element={<Dashboard />} /> */}
               {filteredRoutes?.map((route, idx) => {
@@ -95,7 +91,7 @@ const App = () => {
               })}
               <Route
                 path="*"
-                element={<Navigate to={filteredRoutes[0]?.path} replace />}
+                element={<Navigate to={filteredRoutes[0]?.path || "/crms"} replace />}
               />
 
               {/* <Route
@@ -108,12 +104,12 @@ const App = () => {
           ) : (
             isAuthenticated &&
             filteredRoutes?.length === 0 && (
-              <Route path="/" element={<PublicLayout />}>
+              <Route path="/crms" element={<PublicLayout />}>
                 <Route index element={<NoPermissionPage />} />
-                <Route path="no-permission" element={<NoPermissionPage />} />
+                <Route path="/crms/no-permission" element={<NoPermissionPage />} />
                 <Route
                   path="*"
-                  element={<Navigate to="/no-permission" replace />}
+                  element={<Navigate to="/crms/no-permission" replace />}
                 />
               </Route>
             )

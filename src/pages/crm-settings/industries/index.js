@@ -159,7 +159,7 @@ const IndustryList = () => {
   const deleteData = () => {
     if (selectedIndustry) {
       dispatch(deleteIndustry(selectedIndustry.id));
-      navigate(`/industries`);
+      navigate(`/crms/industries`);
       setShowDeleteModal(false);
     }
   };

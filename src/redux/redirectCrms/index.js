@@ -64,8 +64,8 @@ export const loginWithToken = createAsyncThunk(
       localStorage.setItem("DBName", userData?.DBName);
       // localStorage.setItem("role", userData?.data?.role);
       localStorage.setItem("authToken", userData?.token);
-      localStorage.setItem("user", JSON.stringify(userData?.user)); // Persist user dat
-      return userData; // Backend should send user info
+      localStorage.setItem("userDetails", JSON.stringify(userData?.user)); // Persist user dat
+      return userData?.user; // Backend should send user info
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || "Login failed");
     }
@@ -97,7 +97,7 @@ export const logoutUserWithToken = createAsyncThunk(
       localStorage.removeItem("SubDomain");
       localStorage.removeItem("DBName");
       localStorage.removeItem("authToken"); // Clear auth state
-      localStorage.removeItem("user"); // Clear auth state
+      localStorage.removeItem("userDetails"); // Clear auth state
       localStorage.removeItem("redirectLogin"); // Clear auth state
       return true; // Backend clears the cookie
     } catch (error) {
@@ -120,7 +120,7 @@ export const loadUser = createAsyncThunk(
       const module = localStorage.getItem("module")
       const decodedmodule = atob(module);
       console.log("User", decodedString , decodedmodule)
-      localStorage.setItem("user", JSON.stringify(userData?.data)); // Persist user dat
+      // localStorage.setItem("userDetails", JSON.stringify(userData?.data)); // Persist user dat
       return userData; // Backend should return user info
     } catch (error) {
       localStorage.removeItem("isAuthenticated"); // Ensure sync with logout
@@ -134,8 +134,8 @@ export const loadUser = createAsyncThunk(
 const ngAuthSlice = createSlice({
   name: "ngAuth",
   initialState: {
-    isAuthenticated: localStorage.getItem("isAuthenticated") === "true", // Load initial state from localStorage
-    user: JSON.parse(localStorage.getItem("user")) || null,
+    isAuthenticated: localStorage.getItem("isAuthenticated") === "true" || false, // Load initial state from localStorage
+    user: JSON.parse(localStorage.getItem("userDetails")) || null,
     loading: false,
     error: null,
   },

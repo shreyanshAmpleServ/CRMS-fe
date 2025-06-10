@@ -10,7 +10,7 @@ const DeleteAlert = ({ showModal, setShowModal, selectedContact }) => {
   const handleDeleteContact = () => {
     if (selectedContact) {
       dispatch(deleteContact(selectedContact.id)); // Dispatch the delete action
-      navigate('/contacts')
+      navigate('/crms/contacts')
       setShowModal(false); // Close the modal
     }
   };

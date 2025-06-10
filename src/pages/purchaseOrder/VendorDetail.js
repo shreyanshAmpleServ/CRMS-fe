@@ -44,7 +44,7 @@ const VendorDetail = () => {
   const deleteData = () => {
     if (vendorDetail) {
       dispatch(deleteUser(vendorDetail.id)); // Dispatch the delete action
-      navigate(`/users`); // Navigate to the specified route
+      navigate(`/crms/users`); // Navigate to the specified route
       setShowDeleteModal(false); // Close the modal
     }
   };

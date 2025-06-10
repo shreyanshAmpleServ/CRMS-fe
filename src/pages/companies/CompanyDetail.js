@@ -40,7 +40,7 @@ const CompanyDetail = () => {
   const deleteData = () => {
     if (companyDetail) {
       dispatch(deleteCompany(companyDetail.id)); // Dispatch the delete action
-      navigate(`/companies`); // Navigate to the specified route
+      navigate(`/crms/companies`); // Navigate to the specified route
       setShowDeleteModal(false); // Close the modal
     }
   };

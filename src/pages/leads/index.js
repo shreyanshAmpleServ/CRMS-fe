@@ -185,7 +185,7 @@ const LeadList = () => {
   const deleteData = () => {
     if (selectedLead) {
       dispatch(deleteLead(selectedLead.id));
-      navigate(`/leads`);
+      navigate(`/crms/leads`);
       setShowDeleteModal(false);
     }
   };
@@ -375,7 +375,7 @@ React.useEffect(()=>{
                       />
                     ) : (
                       (() => {
-                        navigate(`/leads-kanban`);
+                        navigate(`/crms/leads-kanban`);
                         return null;
                       })()
                     )}

@@ -20,7 +20,6 @@ const RedirectCRMS = () => {
     (state) => state.ngAuth
   );
   const [errMsg, setErrMsg] = useState("");
-
   // Sync initial error state to errMsg
   useEffect(() => {
     if (error?.message) {

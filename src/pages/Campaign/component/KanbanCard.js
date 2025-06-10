@@ -3,8 +3,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 import moment from "moment"
 import ImageWithDatabase from "../../../components/common/ImageFromDatabase";
+import { all_routes } from "../../../routes/all_routes";
 
 const ActContainerIDKanbanCard = ({ activity, ActContainerID }) => {
+  const route = all_routes;
   return (
     <div className="card kanban-card border" data-id={ActContainerID}>
       <div className="card-body">

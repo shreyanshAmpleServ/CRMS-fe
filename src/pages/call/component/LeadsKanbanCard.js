@@ -2,7 +2,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import { all_routes } from "../../../routes/all_routes";
 const LeadKanbanCard = ({ lead, leadStatus, leadContainerID }) => {
+    const route = all_routes;
   return (
     <div className="card kanban-card border" data-id={leadContainerID}>
       <div className="card-body">
@@ -13,13 +15,13 @@ const LeadKanbanCard = ({ lead, leadStatus, leadContainerID }) => {
           />
           <div className="d-flex align-items-center mb-3">
             <Link
-              to="/deal-details"
+              to={`${route}/${lead.id}`}
               className="avatar avatar-lg bg-gray flex-shrink-0 me-2"
             >
               <span className="avatar-title text-dark"> {`${lead?.first_name?.[0] ?? ''}${lead?.last_name?.[0] ?? ''}`.toUpperCase()}</span>
             </Link>
             <h6 className="fw-medium">
-              <Link to="/deal-details">{`${lead?.first_name} ${lead?.last_name}`}</Link>
+              <Link to={`${route}/${lead.id}`}>{`${lead?.first_name} ${lead?.last_name}`}</Link>
             </h6>
           </div>
         </div>

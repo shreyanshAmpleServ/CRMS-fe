@@ -158,7 +158,7 @@ const ContactStagesList = () => {
   const deleteData = () => {
     if (selectedContactStage) {
       dispatch(deleteContactStage(selectedContactStage.id));
-      navigate(`/contact-stages`);
+      navigate(`/crms/contact-stages`);
       setShowDeleteModal(false);
     }
   };

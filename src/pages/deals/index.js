@@ -213,7 +213,7 @@ const DealList = () => {
   const deleteData = () => {
     if (selecectDeal) {
       dispatch(deleteDeal(selecectDeal.id)); // Dispatch the delete action
-      navigate(`/deals`); // Navigate to the specified route
+      navigate(`/crms/deals`); // Navigate to the specified route
       setShowDeleteModal(false); // Close the modal
     }
   };
@@ -397,7 +397,7 @@ const DealList = () => {
                       />
                     ) : (
                       (() => {
-                        navigate(`/deals-kanban`);
+                        navigate(`/crms/deals-kanban`);
                         return null; // Ensure JSX doesn't break
                       })()
                     )}

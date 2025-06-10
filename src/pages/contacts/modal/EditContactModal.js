@@ -174,10 +174,10 @@ const EditContactModal = ({contact}) => {
       await dispatch(updateContact(formData)).unwrap();
       // await dispatch(updateContact( {id:contact.id, contactData:transformedData})).unwrap();
       closeButton.click(); 
-      navigate('/contacts')
+      navigate('/crms/contacts')
     } catch (error) {
       closeButton.click();
-      navigate('/contacts')
+      navigate('/crms/contacts')
     }
   };
   return (

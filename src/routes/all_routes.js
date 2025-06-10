@@ -1,140 +1,140 @@
 export const all_routes = {
-  dasshboard: "/dashboard",
+  dasshboard: "/crms/dashboard",
 
-  login: "/login",
+  login: "/crms/login",
   /*Contact-route*/
-  contacts: "/contacts",
-  contactDetail: "/contacts/:id",
-  contactGrid: "/contact-grid",
+  contacts: "/crms/contacts",
+  contactDetail: "/crms/contacts/:id",
+  contactGrid: "/crms/contact-grid",
   /*End Contact Route*/
 
-  leadsDetail: "/leads/:id",
-  leads: "/leads",
-  leadskanban: "/leads-kanban",
+  leadsDetail: "/crms/leads/:id",
+  leads: "/crms/leads",
+  leadskanban: "/crms/leads-kanban",
 
   /* Calls */
-  calls: "/calls",
+  calls: "/crms/calls",
 
   /*Compnay-route*/
-  companies: "/companies",
-  companyDetails: "/companies/:id",
+  companies: "/crms/companies",
+  companyDetails: "/crms/companies/:id",
   /*End Compnay Route*/
 
   /* pipeline-route*/
-  pipelines: "/pipelines",
-  pipelineDetail: "/pipelines/:id",
+  pipelines: "/crms/pipelines",
+  pipelineDetail: "/crms/pipelines/:id",
   /* /pipeline Route */
 
   /* Deals Route*/
-  deals: "/deals",
-  dealtDetail: "/deals/:id",
-  dealsKanban: "/deals-kanban",
+  deals: "/crms/deals",
+  dealtDetail: "/crms/deals/:id",
+  dealsKanban: "/crms/deals-kanban",
   /* /Deals Route */
 
   /* Activity Route */
-  activityCalls: "/crm/activity-calls",
-  activityMail: "/crm/activity-mail",
-  activityTask: "/crm/activity-task",
-  activityMeeting: "/crm/activity-meeting",
-  activities: "/crm/activities",
+  activityCalls: "/crms/crm/activity-calls",
+  activityMail: "/crms/crm/activity-mail",
+  activityTask: "/crms/crm/activity-task",
+  activityMeeting: "/crms/crm/activity-meeting",
+  activities: "/crms/crm/activities",
   //CRM SETTINGS
 
   /* Source Route*/
-  sources: "/sources",
+  sources: "/crms/sources",
   /* lost reason*/
-  lostReason: "/lost-reasons",
+  lostReason: "/crms/lost-reasons",
   /* contact-stages */
-  contactStage: "/contact-stages",
+  contactStage: "/crms/contact-stages",
   /* industries */
-  industries: "/industries",
+  industries: "/crms/industries",
   /* call-statuses */
-  callStatus: "/call-status",
-  callResult: "/call-result",
-  callPurpose: "/call-purpose",
-  callType: "/call-types",
+  callStatus: "/crms/call-status",
+  callResult: "/crms/call-result",
+  callPurpose: "/crms/call-purpose",
+  callType: "/crms/call-types",
   /*projects */
-  projects: "/projects",
-  projectDetails: "/projects/:id",
+  projects: "/crms/projects",
+  projectDetails: "/crms/projects/:id",
 
-  state: "/state",
-  country: "/country",
-  currency: "/currency",
+  state: "/crms/state",
+  country: "/crms/country",
+  currency: "/crms/currency",
 
 
   // Settings //
-  connectedApps: "/general-settings/connected-apps",
-  notification: "/general-settings/notification",
-  profile: "/general-settings/profile",
-  security: "/general-settings/security",
+  connectedApps: "/crms/general-settings/connected-apps",
+  notification: "/crms/general-settings/notification",
+  profile: "/crms/general-settings/profile",
+  security: "/crms/general-settings/security",
 
-  appearance: "/website-settings/appearance",
-  companySettings: "/website-settings/company-settings",
-  language: "/website-settings/language",
-  localization: "/website-settings/localization",
-  preference: "/website-settings/preference",
-  prefixes: "/website-settings/prefixes",
-  languageWeb: "/website-settings/language-web",
+  appearance: "/crms/website-settings/appearance",
+  companySettings: "/crms/website-settings/company-settings",
+  language: "/crms/website-settings/language",
+  localization: "/crms/website-settings/localization",
+  preference: "/crms/website-settings/preference",
+  prefixes: "/crms/website-settings/prefixes",
+  languageWeb: "/crms/website-settings/language-web",
 
-  customFields: "/app-settings/custom-fields",
-  invoiceSettings: "/app-settings/invoice-settings",
-  printers: "/app-settings/printers",
+  customFields: "/crms/app-settings/custom-fields",
+  invoiceSettings: "/crms/app-settings/invoice-settings",
+  printers: "/crms/app-settings/printers",
 
 
-  emailSettings: "/system-settings/storage",
-  gdprCookies: "/system-settings/gdpr-cookies",
-  smsGateways: "/system-settings/sms-gateways",
+  emailSettings: "/crms/system-settings/storage",
+  gdprCookies: "/crms/system-settings/gdpr-cookies",
+  smsGateways: "/crms/system-settings/sms-gateways",
 
-  bankAccounts: "/financial-settings/bank-accounts",
-  currencies: "/financial-settings/currencies",
-  paymentGateways: "/financial-settings/payment-gateways",
-  taxRates: "/financial-settings/tax-rates",
+  bankAccounts: "/crms/financial-settings/bank-accounts",
+  currencies: "/crms/financial-settings/currencies",
+  paymentGateways: "/crms/financial-settings/payment-gateways",
+  taxRates: "/crms/financial-settings/tax-rates",
 
-  banIpAddrress: "/other-settings/ban-ip-address",
-  storage: "/other-settings/storage",
+  banIpAddrress: "/crms/other-settings/ban-ip-address",
+  storage: "/crms/other-settings/storage",
 
 
   /* USER MANAGEMENT */
-  manageusers: "/manage-users",
-  manageusersDetails: "/manage-users/:id",
+  manageusers: "/crms/manage-users",
+  manageusersDetails: "/crms/manage-users/:id",
 
-  rolesPermissions: "/roles-permissions",
+  rolesPermissions: "/crms/roles-permissions",
 
   // dashboard routes
-  dealsDashboard: "/dashboard/deals-dashboard",
-  leadsDashboard: "/dashboard/leads-dashboard",
-  projectDashboard: "/dashboard/project-dashboard",
+  dealsDashboard: "/crms/dashboard/deals-dashboard",
+  leadsDashboard: "/crms/dashboard/leads-dashboard",
+  projectDashboard: "/crms/dashboard/project-dashboard",
 
   // Vendor
   vendor: "vendor",
   VendorDetail: "vendor/:id",
 
   // Meeting
-  meetingType:"/meeting-type",
+  meetingType:"/crms/meeting-type",
    
-  modules:"/modules",
+  modules:"/crms/modules",
   
-  documents:"/documents",
-  activityKanban:"/crm/activity-kanban",
+  documents:"/crms/documents",
+  activityKanban:"/crms/crm/activity-kanban",
 
-  productCategory: "/product-category",
-  manufacturer:"/manufacturer",
-  products:"/products",
-  taxSetUp:"/tax-setup",
-  order:"/order",
-  quotation:"/quotation",
-  purchaseOrder:"/purchase-order",
-  salesInvoice:"/sales-invoice",
-  purchaseInvoice:"/purchase-invoice",
-  priceBook:"/price-book",
-  cases:"/cases",
-  solutions:"/solutions",
-  campaigns:"/campaigns",
+  productCategory: "/crms/product-category",
+  manufacturer:"/crms/manufacturer",
+  products:"/crms/products",
+  taxSetUp:"/crms/tax-setup",
+  order:"/crms/order",
+  quotation:"/crms/quotation",
+  purchaseOrder:"/crms/purchase-order",
+  salesInvoice:"/crms/sales-invoice",
+  purchaseInvoice:"/crms/purchase-invoice",
+  priceBook:"/crms/price-book",
+  cases:"/crms/cases",
+  solutions:"/crms/solutions",
+  campaigns:"/crms/campaigns",
 
-  leadReport:"/lead-report",
-  dealReport:"/deal-report",
-  companyReport:"/company-report",
-  contactReport:"/contact-report",
-  projectReport:"/project-report",
-  taskReport:"/task-report",
-  noPermission:"/no-permission",
+  leadReport:"/crms/lead-report",
+  dealReport:"/crms/deal-report",
+  companyReport:"/crms/company-report",
+  contactReport:"/crms/contact-report",
+  projectReport:"/crms/project-report",
+  taskReport:"/crms/task-report",
+  noPermission:"/crms/no-permission",
 };

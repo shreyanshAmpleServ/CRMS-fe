@@ -24,7 +24,7 @@ const ContactGrid = ({ data }) => {
   const deleteData = () => {
     if (selectedCompany) {
       dispatch(deleteCompany(selectedCompany.id)); // Dispatch the delete action
-      navigate(`/companies`); // Navigate to the specified route
+      navigate(`/crms/companies`); // Navigate to the specified route
       setShowDeleteModal(false); // Close the modal
     }
   };

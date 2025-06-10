@@ -159,7 +159,7 @@ const SourceList = () => {
   const deleteData = () => {
     if (selectedSource) {
       dispatch(deleteSource(selectedSource.id));
-      navigate(`/sources`);
+      navigate(`/crms/sources`);
       setShowDeleteModal(false);
     }
   };
