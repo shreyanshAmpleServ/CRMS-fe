@@ -42,7 +42,6 @@ export default function TaskReport() {
   const { taskReport, loading, error, success } = useSelector(
     (state) => state.taskReport
   );
-  console.log("taskReport", taskReport);
   const barOptions = {
     chart: { type: "bar", toolbar: { show: false } },
     colors: ["#28a745", "#dc3545"],

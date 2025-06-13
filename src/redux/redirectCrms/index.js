@@ -39,6 +39,7 @@ export const loginWithToken = createAsyncThunk(
       );
       const userData = response.data.data;
       const user = localStorage.getItem("user")
+      console.log("userDetaisl : ", userData)
       const module = localStorage.getItem("module")
       const decodedString =user ?  atob(user) : null;
       const decodedmodule = atob(module);
@@ -58,13 +59,27 @@ export const loginWithToken = createAsyncThunk(
       localStorage.setItem("redirectLogin", true);
       localStorage.setItem("role",decodedString ? JSON.parse(decodedString) : "admin");
       localStorage.setItem("BLApiUrl", userData?.BLApiUrl);
-      localStorage.setItem("Domain", userData?.Domain);
       localStorage.setItem("api_url", userData?.api_url);
       localStorage.setItem("SubDomain", userData?.SubDomain);
       localStorage.setItem("DBName", userData?.DBName);
       // localStorage.setItem("role", userData?.data?.role);
       localStorage.setItem("authToken", userData?.token);
       localStorage.setItem("userDetails", JSON.stringify(userData?.user)); // Persist user dat
+
+const Attachments = await axios.get(
+        `${userData?.BLApiUrl}/api/common/getAttachmentDetails?id=${userData?.id}&TName=m_user`,
+        {
+          headers: {
+            Authorization: `Bearer ${userData?.token}`,
+            // Accept: "application/json", // Optional
+          },
+        }
+      );
+      console.log("Attachments",Attachments)
+      localStorage.setItem("Picture", JSON.stringify(Attachments?.data));
+
+
+
       return userData?.user; // Backend should send user info
     } catch (error) {
       return thunkAPI.rejectWithValue(error.response?.data || "Login failed");
@@ -92,7 +107,6 @@ export const logoutUserWithToken = createAsyncThunk(
       localStorage.removeItem("permissions"); // Clear auth state
       localStorage.removeItem("role");
       localStorage.removeItem("BLApiUrl");
-      localStorage.removeItem("Domain");
       localStorage.removeItem("api_url");
       localStorage.removeItem("SubDomain");
       localStorage.removeItem("DBName");

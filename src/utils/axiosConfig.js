@@ -11,12 +11,14 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     const isRedirectional = localStorage.getItem("redirectLogin");
-    const token = localStorage.getItem("authToken"); // Or sessionStorage, or a context
+    const token = localStorage.getItem("token"); // Or sessionStorage, or a context
+    const dbName = localStorage.getItem("DBName"); // Or sessionStorage, or a context
     if (isRedirectional) {
       const BLApiUrl = localStorage.getItem("BLApiUrl"); // Or sessionStorage, or a context
       const Domain = localStorage.getItem("Domain"); // Or sessionStorage, or a context
       config.headers.BLApiUrl = BLApiUrl;
       config.headers.domain = Domain;
+      config.headers.dbName = dbName;
     }
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -31,11 +33,12 @@ apiClient.interceptors.response.use(
   (response) => response,
   (error) => {
     if (
-      error.response?.status === 401 &&
-      window.location.pathname !== "/login"
+     ( error.response?.status === 401 ||   error.response?.status === 403  )&&
+      window.location.pathname !== "/crms/login"
     ) {
       // Handle unauthorized access (e.g., redirect to login)
-      window.location.href = "/login";
+      // window.location.href = "/login";
+    
     }
     return Promise.reject(error);
   }

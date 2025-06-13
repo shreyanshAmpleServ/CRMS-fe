@@ -22,7 +22,7 @@ const Profile = () => {
   }, [dispatch]);
   const { userDetail, loading } = useSelector((state) => state.users);
 
-  const user = JSON.parse(localStorage.getItem("userDetails"))
+  const user = JSON.parse(atob(localStorage.getItem("userDetails")))
   useEffect(() => {
     setSelectedAvatar( user?.mime_type
       ? `${user?.mime_type},${user?.template}`

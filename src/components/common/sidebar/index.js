@@ -11,6 +11,7 @@ import {
 import { IoIosArrowDown } from "react-icons/io";
 import { IoIosArrowUp } from "react-icons/io";
 import { loadUser } from "../../../redux/redirectCrms";
+import { BsPersonCircle } from "react-icons/bs";
 
 const Sidebar = () => {
   const Location = useLocation();
@@ -25,9 +26,9 @@ const Sidebar = () => {
   const [subsidebar, setSubsidebar] = useState("");
   const isRedirectional = localStorage.getItem("redirectLogin");
 
-//   const { user, isAuthenticated } = useSelector((state) =>
-//  state.ngAuth 
-//   );
+  //   const { user, isAuthenticated } = useSelector((state) =>
+  //  state.ngAuth 
+  //   );
   const user = JSON.parse(localStorage.getItem("userDetails"))
   // console.log("User",user)
   // useEffect(()=>{
@@ -123,16 +124,17 @@ const Sidebar = () => {
               <ul>
                 <li className="clinicdropdown theme">
                   <Link to="#">
-                    <img
+                    {(user?.mime_type && user?.template || user?.profile_img) ? <img
                       src={
-                        user?.mime_type
+                        user?.mime_type && user?.template
                           ? `${user?.mime_type},${user?.template}`
-                          : user?.profile_img ||
-                            "assets/img/profiles/avatar-14.jpg"
+                          : user?.profile_img 
                       }
-                      className="img-fluid"
                       alt="Profile"
+                      style={{ height: "100%" }}
+                      className="p-1"
                     />
+                      : <span className="sidebar-image"><BsPersonCircle style={{ fontSize: "20px" }} /></span>}
 
                     <div className="user-names">
                       <h5>{`${user?.username || user?.full_name}`}</h5>
@@ -191,15 +193,15 @@ const Sidebar = () => {
                         const hasPermission = isAdmin
                           ? true
                           : Permissions.some(
-                              (permission) =>
-                                permission.module_name
-                                  ?.trim()
-                                  ?.toLowerCase() ===
-                                  title.label?.trim()?.toLowerCase() &&
-                                Object.values(permission.permissions).some(
-                                  (perm) => perm === true
-                                )
-                            );
+                            (permission) =>
+                              permission.module_name
+                                ?.trim()
+                                ?.toLowerCase() ===
+                              title.label?.trim()?.toLowerCase() &&
+                              Object.values(permission.permissions).some(
+                                (perm) => perm === true
+                              )
+                          );
 
                         if (!hasPermission) return null;
 
@@ -208,39 +210,36 @@ const Sidebar = () => {
                             <Link
                               to={title?.submenu ? "#" : title?.link}
                               onClick={() => toggleSidebar(title)}
-                              className={`${
-                                subOpen === title?.label ? "subdrop" : ""
-                              } ${subOpen === title?.label ? "active" : ""} ${
-                                title?.links?.includes(Location.pathname)
+                              className={`${subOpen === title?.label ? "subdrop" : ""
+                                } ${subOpen === title?.label ? "active" : ""} ${title?.links?.includes(Location.pathname)
                                   ? "active"
                                   : ""
-                              } ${
-                                title?.submenuItems
+                                } ${title?.submenuItems
                                   ?.map((link) => link?.link)
                                   .includes(Location.pathname) ||
-                                title?.link === Location.pathname
+                                  title?.link === Location.pathname
                                   ? "active"
                                   : "" ||
-                                      isMatch(
-                                        title?.subLink1,
-                                        Location.pathname
-                                      )
+                                    isMatch(
+                                      title?.subLink1,
+                                      Location.pathname
+                                    )
                                     ? "active"
                                     : "" ||
-                                        isMatch(
-                                          title?.subLink2,
-                                          Location.pathname
-                                        )
+                                      isMatch(
+                                        title?.subLink2,
+                                        Location.pathname
+                                      )
                                       ? "active"
                                       : "" ||
-                                          title?.subLink3 === Location.pathname
+                                        title?.subLink3 === Location.pathname
                                         ? "active"
                                         : "" ||
-                                            title?.subLink4 ===
-                                              Location.pathname
+                                          title?.subLink4 ===
+                                          Location.pathname
                                           ? "active"
                                           : ""
-                              }`}
+                                }`}
                             >
                               <i className={title.icon}></i>
                               <span>{title?.label}</span>
@@ -261,14 +260,13 @@ const Sidebar = () => {
                                 >
                                   <Link
                                     to={item?.link}
-                                    className={`${
-                                      item?.submenuItems
+                                    className={`${item?.submenuItems
                                         ?.map((link) => link?.link)
                                         .includes(Location.pathname) ||
-                                      item?.link === Location.pathname
+                                        item?.link === Location.pathname
                                         ? "active subdrop"
                                         : ""
-                                    } `}
+                                      } `}
                                     onClick={() => {
                                       toggleSubsidebar(item?.label);
                                     }}
@@ -292,18 +290,16 @@ const Sidebar = () => {
                                       <li key={items.label}>
                                         <Link
                                           to={items?.link}
-                                          className={`${
-                                            subsidebar === items?.label
+                                          className={`${subsidebar === items?.label
                                               ? "submenu-two subdrop"
                                               : "submenu-two"
-                                          } ${
-                                            items?.submenuItems
+                                            } ${items?.submenuItems
                                               ?.map((link) => link.link)
                                               .includes(Location.pathname) ||
-                                            items?.link === Location.pathname
+                                              items?.link === Location.pathname
                                               ? "active"
                                               : ""
-                                          }`}
+                                            }`}
                                         >
                                           {items?.label}
                                         </Link>

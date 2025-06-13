@@ -18,6 +18,8 @@ import { base_path } from "../../../config/environment";
 import ImageWithDatabase from "../ImageFromDatabase";
 import logo_path from "../../../assets/logo-2.png";
 import { logoutUserWithToken } from "../../../redux/redirectCrms";
+import { BsPersonCircle } from "react-icons/bs";
+
 
 const Header = () => {
   const route = all_routes;
@@ -359,132 +361,9 @@ const Header = () => {
                     </div>
                   </div>
                 </li>
-                {/* <li className="nav-item">
-                  <Link to={route.faq} className="btn btn-help">
-                    <i className="ti ti-help-hexagon" />
-                  </Link>
-                </li>
-                <li className="nav-item">
-                  <Link to="#" className="btn btn-chart-pie">
-                    <i className="ti ti-chart-pie" />
-                  </Link>
-                </li> */}
               </ul>
             </li>
-            {/* /Nav List */}
-            {/* Email */}
-            {/* <li className="nav-item nav-item-email nav-item-box">
-              <Link to={route.email}>
-                <i className="ti ti-message-circle-exclamation" />
-                <span className="badge rounded-pill">14</span>
-              </Link>
-            </li> */}
-            {/* /Email */}
-            {/* Notifications */}
-            {/* <li className="nav-item dropdown nav-item-box">
-              <Link to="#" className="nav-link" data-bs-toggle="dropdown">
-                <i className="ti ti-bell" />
-                <span className="badge rounded-pill">13</span>
-              </Link>
-              <div className="dropdown-menu dropdown-menu-end notification-dropdown">
-                <div className="topnav-dropdown-header">
-                  <h4 className="notification-title">Notifications</h4>
-                </div>
-                <div className="noti-content">
-                  <ul className="notification-list">
-                    <li className="notification-message">
-                      <Link to={route.activities}>
-                        <div className="media d-flex">
-                          <span className="avatar flex-shrink-0">
-                            <ImageWithBasePath
-                              src="assets/img/profiles/avatar-02.jpg"
-                              alt="Profile"
-                            />
-                            <span className="badge badge-info rounded-pill" />
-                          </span>
-                          <div className="media-body flex-grow-1">
-                            <p className="noti-details">
-                              Ray Arnold left 6 comments on Isla Nublar SOC2
-                              compliance report
-                            </p>
-                            <p className="noti-time">
-                              Last Wednesday at 9:42 am
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-                    </li>
-                    <li className="notification-message">
-                      <Link to={route.activities}>
-                        <div className="media d-flex">
-                          <span className="avatar flex-shrink-0">
-                            <ImageWithBasePath
-                              src="assets/img/profiles/avatar-03.jpg"
-                              alt="Profile"
-                            />
-                          </span>
-                          <div className="media-body flex-grow-1">
-                            <p className="noti-details">
-                              Denise Nedry replied to Anna Srzand
-                            </p>
-                            <p className="noti-sub-details">
-                              “Oh, I finished de-bugging the phones, but the
-                              system's compiling for eighteen minutes, or
-                              twenty. So, some minor systems may go on and off
-                              for a while.”
-                            </p>
-                            <p className="noti-time">
-                              Last Wednesday at 9:42 am
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-                    </li>
-                    <li className="notification-message">
-                      <Link to={route.activities}>
-                        <div className="media d-flex">
-                          <span className="avatar flex-shrink-0">
-                            <ImageWithBasePath
-                              alt=""
-                              src="assets/img/profiles/avatar-06.jpg"
-                            />
-                          </span>
-                          <div className="media-body flex-grow-1">
-                            <p className="noti-details">
-                              John Hammond attached a file to Isla Nublar SOC2
-                              compliance report
-                            </p>
-                            <div className="noti-pdf">
-                              <div className="noti-pdf-icon">
-                                <span>
-                                  <i className="ti ti-chart-pie" />
-                                </span>
-                              </div>
-                              <div className="noti-pdf-text">
-                                <p>EY_review.pdf</p>
-                                <span>2mb</span>
-                              </div>
-                            </div>
-                            <p className="noti-time">
-                              Last Wednesday at 9:42 am
-                            </p>
-                          </div>
-                        </div>
-                      </Link>
-                    </li>
-                  </ul>
-                </div>
-                <div className="topnav-dropdown-footer">
-                  <Link to={route.activities} className="view-link">
-                    View all
-                  </Link>
-                  <Link to="#" className="clear-link">
-                    Clear all
-                  </Link>
-                </div>
-              </div>
-            </li> */}
-            {/* /Notifications */}
+          
             {/* Profile Dropdown */}
             <li className="nav-item dropdown has-arrow main-drop">
               <Link
@@ -494,17 +373,17 @@ const Header = () => {
               >
                 <span className="user-info">
                   <span className="user-letter">
-                    <img
+                  {(user?.mime_type && user?.template || user?.profile_img) ?    <img
                       src={
-                        user?.mime_type
+                        user?.mime_type && user?.template
                           ? `${user?.mime_type},${user?.template}`
-                          : user?.profile_img ||
-                            "assets/img/profiles/avatar-14.jpg"
+                          : user?.profile_img
                       }
                       alt="Profile"
                       style={{ height: "100%" }}
                       className="p-1"
                     />
+                   : <BsPersonCircle style={{fontSize:"3rem" }} />}
                   </span>
                   <span className="badge badge-success rounded-pill" />
                 </span>

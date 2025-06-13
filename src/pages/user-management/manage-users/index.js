@@ -41,7 +41,7 @@ const ManageUsers = () => {
   });
   const permissions =JSON?.parse(localStorage.getItem("permissions"))
   const allPermissions = permissions?.filter((i)=>i?.module_name === "Manage Users")?.[0]?.permissions
-  const isAdmin = localStorage.getItem("role")=== "Admin"
+  const isAdmin = localStorage.getItem("role")=== "admin"
   const isView =  isAdmin  ? true :  allPermissions?.view
   const isCreate = isAdmin ? true : allPermissions?.create
   const isUpdate = isAdmin ? true : allPermissions?.update

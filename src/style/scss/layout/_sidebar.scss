@@ -17,6 +17,11 @@
     @include respond-below(custom575) {
         width: 100%;
     }
+    .sidebar-image svg {
+        width: 30px !important;
+        max-width: 30px !important;
+        height: 30px !important;
+    }
     .slimScrollDiv {
         border-right: 1px solid transparent;
         @include respond-below(custom575) {

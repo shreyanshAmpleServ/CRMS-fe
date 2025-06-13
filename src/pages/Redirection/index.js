@@ -1,15 +1,8 @@
 // src/components/Login.js
-import React, { useState, useEffect } from "react";
-import ImageWithBasePath from "../../components/common/imageWithBasePath";
-import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { loginUser, registerUser } from "../../redux/auth/authSlice";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { AllRoutes } from "../../config/AllRoute";
-import { useSelector } from "react-redux";
-import FlashMessage from "../../components/common/modals/FlashMessage";
-import logo from "../../assets/crms.png";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Loader from "../../components/common/loader";
 import { loginWithToken } from "../../redux/redirectCrms";
 
@@ -43,6 +36,9 @@ const RedirectCRMS = () => {
   //     }
   //   };
   const Token = localStorage.getItem("token")
+  const domain = localStorage.getItem("domain")
+  const decodedDomain = domain ?  atob(domain) : null;
+  const parseData = JSON.parse(decodedDomain)?.SubDomain
   console.log("Token from local storage ; ", Token)
   useEffect(() => {
     const performLogin = async () => {
@@ -50,8 +46,8 @@ const RedirectCRMS = () => {
       const result = await dispatch(
         loginWithToken({
           token:
-            Token || "eyJhbGciOiJBMjU2Q0JDLUhTNTEyIiwidHlwIjoiSldUIn0.eyJ1c2VyaWQiOiIxIiwidXNlcm5hbWUiOiJhZG1pbiIsImRibmFtZSI6IkRDQ0J1c2luZXNzU3VpdGVfbW93YXJhIiwibmJmIjoxNzQ5NDQzMDg5LCJleHAiOjE3NDk2MjMwODksImlhdCI6MTc0OTQ0MzA4OX0.KHwKQl2t6vK-izruFUGLyFdI7uV0P5fIfh8ERTyLbpmx4m-XaIvF5tQsjhr_TsAgMkkmehHHHNuHCJnaeyNNdg",
-          Domain: "mowara",
+            Token ,
+                Domain:parseData|| "mowara",
         })
       );
       if (loginWithToken.fulfilled.match(result)) {
@@ -59,6 +55,7 @@ const RedirectCRMS = () => {
         // console.log("Login : ", loginWithToken.fulfilled.match(result));
       } else {
         console.error("Login failed:", result.payload || result.error);
+      // window.location.href = "https://mowara.dcclogsuite.com/";
       }
     };
 

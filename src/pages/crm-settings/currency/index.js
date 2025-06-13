@@ -25,10 +25,11 @@ const CurrencyList = () => {
     
     const permissions =JSON?.parse(localStorage.getItem("permissions"))
     const allPermissions = permissions?.filter((i)=>i?.module_name === "Currency")?.[0]?.permissions
-    const isView = allPermissions?.view
-    const isCreate = allPermissions?.create
-    const isUpdate = allPermissions?.update
-    const isDelete = allPermissions?.delete
+    const isAdmin = localStorage.getItem("role")=== "admin"
+    const isView =   isAdmin || allPermissions?.view
+    const isCreate = isAdmin || allPermissions?.create
+    const isUpdate = isAdmin || allPermissions?.update
+    const isDelete = isAdmin || allPermissions?.delete
 
     const dispatch = useDispatch();
     const columns = [
